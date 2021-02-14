@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { ipcMain, IpcRenderer } from 'electron';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -35,13 +35,13 @@ export class MALService {
 
   private malTokenInfo: MalTokenResponse;
 
-  private malList: any;
+  private list = new BehaviorSubject<UserList>(null);
 
   constructor(
     private _http: HttpClient, 
-    private _ipc: IPCService
+    private _ipc: IPCService,
+    private _zone: NgZone
   ) { 
-    console.log('resfrfes');
     this.refreshAccessToken();
   }
 
@@ -72,18 +72,22 @@ export class MALService {
     formData.append('code', this.malAuthInfo.code);
     formData.append('code_verifier', codeVerifier);
     formData.append('grant_type', 'authorization_code');
-    this._http.post(url, formData).pipe(
+    this._http.post<MalTokenResponse>(url, formData).pipe(
       (take(1))
     ).subscribe(
-      (res: MalTokenResponse) => {
-        this.malTokenInfo = res;
-        this.getCurrentUser().pipe(
+      tokenInfo => {
+        this.malTokenInfo = tokenInfo;
+        // Store new token
+        this.storeRefreshToken();
+        // Populate MAL List
+        this.getList().pipe(
           take(1)
         ).subscribe(
-          res => {
-            console.log('Current User', res);
-            // Store new token
-            this.storeRefreshToken();
+          list => {
+            this.list.next(list);
+          }, 
+          err => {
+            console.error('Failed to retrieve MAL user list', err);
           }
         );
       },
@@ -103,15 +107,20 @@ export class MALService {
   // Check for refresh token and update Access Token in service
   private refreshAccessToken() {
     this._ipc.renderer.send('refresh-token');
-    this._ipc.renderer.once('token-refreshed', (event, tokenInfo: MalRefreshResponse ) => {
-      console.log(tokenInfo);
-      if (tokenInfo) {
+    this._ipc.renderer.once('token-refreshed', (event, authResponse: MalRefreshResponse ) => {
+      this._zone.run(() => this.updateAccessToken(authResponse));
+    });
+  }
+
+  private updateAccessToken(authResponse: MalRefreshResponse) {
+    console.log(authResponse);
+      if (authResponse) {
         const url = 'https://myanimelist.net/v1/oauth2/token';
         const formData = new FormData();
-        formData.append('client_id', tokenInfo.cId);
-        formData.append('client_secret', tokenInfo.cS);
+        formData.append('client_id', authResponse.cId);
+        formData.append('client_secret', authResponse.cS);
         formData.append('grant_type', 'refresh_token');
-        formData.append('refresh_token', tokenInfo.refresh_token);
+        formData.append('refresh_token', authResponse.refresh_token);
         this._http.post<MalTokenResponse>(url, formData).pipe(
           take(1)
         ).subscribe(
@@ -119,14 +128,22 @@ export class MALService {
             this.malTokenInfo = res;
             console.log(this.malTokenInfo);
             this.storeRefreshToken();
-            this.getList();
+            this.getList().pipe(
+              take(1)
+            ).subscribe(
+              list => {
+                this.list.next(list);
+              }, 
+              err => {
+                console.error(err);
+              }
+            );
           },
           err => {
             console.error(err);
           }
         )
       }
-    });
   }
 
   // TODO: Temporary auth method
@@ -138,13 +155,17 @@ export class MALService {
     return this._http.get(url, headers);
   }
 
-  public getList(): Observable<UserList> {
+  private getList(): Observable<UserList> {
     const baseUrl = 'https://api.myanimelist.net/v2/users/@me/animelist';
     const headers = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this.malTokenInfo.access_token}`)
     };
     const url = `${baseUrl}?&limit=999`;
     return this._http.get<UserList>(url, headers);
+  }
+
+  public getListData(): BehaviorSubject<UserList> {
+    return this.list;
   }
 
   // Generate a secure random string using the browser crypto functions

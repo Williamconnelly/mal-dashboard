@@ -1,0 +1,5 @@
+<ng-container *ngIf="list && list.data.length">
+  <ng-container *ngFor="let media of list.data">
+    <p>{{media.node.title}}</p>
+  </ng-container>
+</ng-container>
