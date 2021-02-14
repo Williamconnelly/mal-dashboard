@@ -80,7 +80,7 @@ export class MALService {
         // Store new token
         this.storeRefreshToken();
         // Populate MAL List
-        this.getList().pipe(
+        this.getUserList().pipe(
           take(1)
         ).subscribe(
           list => {
@@ -108,12 +108,13 @@ export class MALService {
   private refreshAccessToken() {
     this._ipc.renderer.send('refresh-token');
     this._ipc.renderer.once('token-refreshed', (event, authResponse: MalRefreshResponse ) => {
+      // Run ipc callback in zone to notify Angular
       this._zone.run(() => this.updateAccessToken(authResponse));
     });
   }
 
+  // Helper CB method for refreshAccessToken
   private updateAccessToken(authResponse: MalRefreshResponse) {
-    console.log(authResponse);
       if (authResponse) {
         const url = 'https://myanimelist.net/v1/oauth2/token';
         const formData = new FormData();
@@ -126,9 +127,8 @@ export class MALService {
         ).subscribe(
           res => {
             this.malTokenInfo = res;
-            console.log(this.malTokenInfo);
             this.storeRefreshToken();
-            this.getList().pipe(
+            this.getUserList().pipe(
               take(1)
             ).subscribe(
               list => {
@@ -155,12 +155,12 @@ export class MALService {
     return this._http.get(url, headers);
   }
 
-  private getList(): Observable<UserList> {
+  private getUserList(): Observable<UserList> {
     const baseUrl = 'https://api.myanimelist.net/v2/users/@me/animelist';
     const headers = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this.malTokenInfo.access_token}`)
     };
-    const url = `${baseUrl}?&limit=999`;
+    const url = `${baseUrl}?fields=list_status&limit=999`;
     return this._http.get<UserList>(url, headers);
   }
 
