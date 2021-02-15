@@ -9,7 +9,7 @@ function createAppWindow() {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
-    },
+    }
   });
   mainWindow.loadURL(
     url.format({

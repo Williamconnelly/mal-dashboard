@@ -18,7 +18,7 @@ export interface ListStatus {
 }
 
 export interface UserList {
-  data: {node: ListNode, list_status: ListStatus}[];
+  data: { node: ListNode }[];
   paging: object;
 };
 

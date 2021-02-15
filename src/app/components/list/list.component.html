@@ -1,5 +1,24 @@
-<ng-container *ngIf="list && list.data.length">
+<!-- <ng-container *ngIf="list && list.data.length">
   <ng-container *ngFor="let media of list.data">
     <p>{{media.node.title}}</p>
   </ng-container>
+</ng-container> -->
+
+<ng-container *ngIf="list$.value && list$.value.data.length">  
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Score</th>
+      <th>Format</th>
+      <th>Status</th>
+    </tr>
+    <ng-container *ngFor="let media of (list$ | async).data; let i = index">
+      <tr>
+        <td>{{media.node.title}}</td>
+        <td>{{media.node.my_list_status.score || '--'}}</td>
+        <td>{{media.node.media_type | titlecase}}</td>
+        <td>{{media.node.my_list_status.status | titlecase}}</td>
+      </tr>
+    </ng-container>
+  </table>
 </ng-container>

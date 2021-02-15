@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { MALService } from 'src/app/services/mal.service';
 import { UserList } from 'src/app/types/mal-types';
@@ -10,7 +11,7 @@ import { UserList } from 'src/app/types/mal-types';
 })
 export class ListComponent implements OnInit {
 
-  public list: UserList
+  public list$ = new BehaviorSubject<UserList>(null);
 
   constructor(private _mal: MALService) {
     this._mal.getListData().pipe(
@@ -19,7 +20,7 @@ export class ListComponent implements OnInit {
     ).subscribe(
       list => {
         console.log('Got List', list);
-        this.list = list;
+        this.list$.next(list);
       }, 
       err => {
         console.error(err);
