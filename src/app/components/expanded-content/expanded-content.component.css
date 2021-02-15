@@ -1,0 +1,42 @@
+.expanded-content-container {
+  padding: 0.8rem 1rem;
+  display: flex;
+}
+
+.card {
+  display: inline-block;
+  font-size: 1.3rem;
+  height: 210px;
+  position: relative;
+  width: 11rem;
+  min-width: 140px;
+  box-sizing: content-box;
+  margin-right: 1rem;
+}
+
+.cover {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 0;
+  border: 1px solid #4065ba;
+  border-radius: 3px;
+}
+
+.image {
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 3px;
+  height: 100%;
+  width: 100%;
+}
+
+.panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-in-out;
+  box-sizing: border-box;
+}

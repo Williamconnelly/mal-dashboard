@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthenticateComponent } from './components/authenticate/authenticate.component';
 import { ListComponent } from './components/list/list.component';
+import { ExpandedContentComponent } from './components/expanded-content/expanded-content.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthenticateComponent,
-    ListComponent
+    ListComponent,
+    ExpandedContentComponent
   ],
   imports: [
     BrowserModule,

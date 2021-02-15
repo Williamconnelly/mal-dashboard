@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { MALService } from 'src/app/services/mal.service';
 import { UserList } from 'src/app/types/mal-types';
+import { ExpandedContentComponent } from '../expanded-content/expanded-content.component';
 
 @Component({
   selector: 'app-list',
@@ -10,6 +11,8 @@ import { UserList } from 'src/app/types/mal-types';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
+
+  @ViewChildren('expandedContent') expandedContent: QueryList<ExpandedContentComponent>;
 
   public list$ = new BehaviorSubject<UserList>(null);
 
@@ -31,5 +34,9 @@ export class ListComponent implements OnInit {
   ngOnInit() {
 
   }
+
+  public toggleExpandedContent(index: number): void {
+    this.expandedContent.toArray()[index].toggleExpansion();
+  };
 
 }

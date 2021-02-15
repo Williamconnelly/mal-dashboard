@@ -1,23 +1,26 @@
-<!-- <ng-container *ngIf="list && list.data.length">
-  <ng-container *ngFor="let media of list.data">
-    <p>{{media.node.title}}</p>
-  </ng-container>
-</ng-container> -->
-
 <ng-container *ngIf="list$.value && list$.value.data.length">  
   <table>
-    <tr>
+    <tr class="table-header-row">
+      <th>Image</th>
       <th>Title</th>
       <th>Score</th>
       <th>Format</th>
       <th>Status</th>
     </tr>
     <ng-container *ngFor="let media of (list$ | async).data; let i = index">
-      <tr>
+      <tr (click)="toggleExpandedContent(i)">
+        <td>
+          <div class="table-image" [ngStyle]="{'background-image':'url(' + media.node.main_picture.medium + ')'}"></div>
+        </td>
         <td>{{media.node.title}}</td>
         <td>{{media.node.my_list_status.score || '--'}}</td>
-        <td>{{media.node.media_type | titlecase}}</td>
+        <td>{{media.node.media_type | uppercase}}</td>
         <td>{{media.node.my_list_status.status | titlecase}}</td>
+      </tr>
+      <tr class="expanding-row-container">
+        <td colspan="5" class="expanding-row">
+          <app-expanded-content #expandedContent [listNode]="media.node"></app-expanded-content>
+        </td>
       </tr>
     </ng-container>
   </table>
