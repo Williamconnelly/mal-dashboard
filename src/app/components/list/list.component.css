@@ -1,3 +1,8 @@
+.list-wrapper {
+  height: calc(100% - 4rem);
+  overflow: auto;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -61,6 +66,6 @@ tr:not(:first-child):hover td:first-child:not(.expanding-row) {
   width: 43px;
 }
 
-.table-header-row {
+/* .table-header-row {
   display: none;
-}
+} */

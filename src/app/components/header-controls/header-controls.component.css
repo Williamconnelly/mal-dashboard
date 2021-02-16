@@ -1,0 +1,106 @@
+.controls-wrapper {
+  height: 4rem;
+  width: 100%;
+  background-color: #e1e7f5;
+  border-width: 1px 0px;
+  border-style: ridge;
+  border-color: #909090;
+  padding: 0.3rem 2rem;
+  box-sizing: border-box;
+  display: flex;
+}
+
+.header-button {
+  display: inline-block;
+  text-align: center;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.header-button p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.header-button:not(:first-child):not(:last-child) {
+  margin: 0px 2rem
+}
+
+.controls-wrapper > :nth-child(4) {
+  margin-right: auto;
+}
+
+.header-button:first-child {
+  margin-right: 2rem;
+}
+
+.header-icon {
+  color: #4065ba;
+  font-size: 2rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 130px;
+  height: 39px;
+  margin-top: 0.48rem;
+  margin-right: 2rem;
+}
+
+.switch input {
+  display:none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 32px;
+  width: 32px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #486ffd;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #ffffff;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(90px);
+}
+
+.slider:after {
+ content:'ANIME';
+ color: black;
+ display: block;
+ position: absolute;
+ transform: translate(-50%,-50%);
+ top: 50%;
+ left: 50%;
+ font-size: 14px;
+}
+
+input:checked + .slider:after
+{  
+  content:'MANGA';
+}
