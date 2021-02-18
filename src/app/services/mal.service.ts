@@ -35,7 +35,7 @@ export class MALService {
 
   private malTokenInfo: MalTokenResponse;
 
-  private list = new BehaviorSubject<UserList>(null);
+  private list$ = new BehaviorSubject<UserList>(null);
 
   // Included in getUserList request
   private enabledRequestFields = [
@@ -120,7 +120,7 @@ export class MALService {
           take(1)
         ).subscribe(
           list => {
-            this.list.next(list);
+            this.list$.next(list);
           }, 
           err => {
             console.error('Failed to retrieve MAL user list', err);
@@ -166,7 +166,7 @@ export class MALService {
               take(1)
             ).subscribe(
               list => {
-                this.list.next(list);
+                this.list$.next(list);
               }, 
               err => {
                 console.error(err);
@@ -200,7 +200,7 @@ export class MALService {
   }
 
   public getListData(): BehaviorSubject<UserList> {
-    return this.list;
+    return this.list$;
   }
 
   // Generate a secure random string using the browser crypto functions

@@ -1,4 +1,7 @@
 <div class="controls-wrapper">
+  <div class='search-wrapper'>
+    <input class="searchbar" type="text" [(ngModel)]="searchString" (ngModelChange)="searchFieldChanged($event)">
+  </div>
   <div class="header-button">
     <i class="header-icon far fa-chart-bar"></i>
     <p>Stats</p>

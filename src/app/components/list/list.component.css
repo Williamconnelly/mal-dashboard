@@ -66,6 +66,8 @@ tr:not(:first-child):hover td:first-child:not(.expanding-row) {
   width: 43px;
 }
 
-/* .table-header-row {
-  display: none;
-} */
+.scroll-viewport {
+  height: 100%;
+  width: 100%;
+}
+

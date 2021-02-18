@@ -10,6 +10,18 @@
   display: flex;
 }
 
+.searchbar {
+  margin-top: 0.3rem;
+  width: 25rem;
+  border: 1px solid #4065ba;
+  padding: 10px;
+  height: 20px;
+  outline-color: #4065ba;
+  color: black;
+  font-size: 1.1rem;
+  border-radius: 4px;
+}
+
 .header-button {
   display: inline-block;
   text-align: center;
@@ -26,7 +38,7 @@
   margin: 0px 2rem
 }
 
-.controls-wrapper > :nth-child(4) {
+.controls-wrapper > :nth-child(5) {
   margin-right: auto;
 }
 

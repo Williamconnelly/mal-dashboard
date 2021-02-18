@@ -1,29 +1,40 @@
-<ng-container *ngIf="list$.value && list$.value.data.length">  
+<ng-container *ngIf="infinite | async as nodes">  
   <div class="list-wrapper">
-    <table>
-      <tr class="table-header-row">
-        <th>Image</th>
-        <th>Title</th>
-        <th>Score</th>
-        <th>Format</th>
-        <th>Status</th>
-      </tr>
-      <ng-container *ngFor="let media of (list$ | async).data; let i = index">
-        <tr (click)="toggleExpandedContent(i)">
-          <td>
-            <div class="table-image" [ngStyle]="{'background-image':'url(' + media.node.main_picture.medium + ')'}"></div>
-          </td>
-          <td>{{media.node.title}}</td>
-          <td>{{media.node.my_list_status.score || '--'}}</td>
-          <td>{{media.node.media_type | uppercase}}</td>
-          <td>{{media.node.my_list_status.status | titlecase}}</td>
+    <cdk-virtual-scroll-viewport [itemSize]="rowSize" class="scroll-viewport" (scrolledIndexChange)="nextBatch($event, (nodes[nodes.length - 1].id))" appViewportResize>
+      <table>
+        <tr class="table-header-row">
+          <th style="width: 10%;">Image</th>
+          <th style="width: 60%;">Title</th>
+          <th style="width: 10%;">Score</th>
+          <th style="width: 10%;">Format</th>
+          <th style="width: 10%;">Status</th>
         </tr>
-        <tr class="expanding-row-container">
-          <td colspan="5" class="expanding-row">
-            <app-expanded-content #expandedContent [listNode]="media.node"></app-expanded-content>
-          </td>
-        </tr>
-      </ng-container>
-    </table>
+        <ng-container *cdkVirtualFor="let media of nodes; let i = index; templateCacheSize: 0">
+          <tr (click)="toggleExpandedContent(media.id)" class="table-body-row">
+            <ng-container *ngIf="media">
+              <td style="width: 10%;">
+                <div class="table-image" [ngStyle]="{'background-image':'url(' + media.main_picture.medium + ')'}"></div>
+              </td>
+              <td style="width: 60%;">{{media.title}}</td>
+              <td style="width: 10%;">{{media.my_list_status.score || '--'}}</td>
+              <td style="width: 10%;">{{media.media_type | uppercase}}</td>
+              <td style="width: 10%;">{{media.my_list_status.status | titlecase}}</td>
+            </ng-container>
+            <ng-container *ngIf="!media">
+              <td style="width: 10%;">Loading...</td>
+              <td style="width: 60%;">Loading...</td>
+              <td style="width: 10%;">Loading...</td>
+              <td style="width: 10%;">Loading...</td>
+              <td style="width: 10%;">Loading...</td>
+            </ng-container>
+          </tr>
+          <tr class="expanding-row-container">
+            <td colspan="5" class="expanding-row">
+              <app-expanded-content #expandedContent [listNode]="media"></app-expanded-content>
+            </td>
+          </tr>
+        </ng-container>
+      </table>
+    </cdk-virtual-scroll-viewport>
   </div>
 </ng-container>
