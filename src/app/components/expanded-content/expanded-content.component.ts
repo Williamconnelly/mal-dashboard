@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { MALService } from 'src/app/services/mal.service';
 import { ListNode } from 'src/app/types/mal-types';
 
 @Component({
@@ -28,7 +29,9 @@ export class ExpandedContentComponent implements OnInit, AfterViewInit, OnDestro
 
   private isTransitioning: boolean;
 
-  constructor(private _renderer: Renderer2) { }
+  public episodes$ = new BehaviorSubject<string[]>(null);
+
+  constructor(private _renderer: Renderer2, private _mal: MALService) { }
 
   ngOnInit() {
     // When closed, this callback will set the height to 0 and trigger the animation callback.
@@ -71,6 +74,18 @@ export class ExpandedContentComponent implements OnInit, AfterViewInit, OnDestro
     if (!this.isTransitioning) {
       this.expanded = !this.expanded;
       this.expanded ? this.expandedController$.next(this.expanded) : this.closeExpanded$.next(this.expanded);
+    }
+    if (!this.episodes$.value) {
+      this._mal.getDirectoryContents('F:\\Anime\\Houseki no Kuni').pipe(
+        take(1)
+      ).subscribe(
+        res => {
+          this.episodes$.next(res);
+        },
+        err => {
+          console.error(err);
+        }
+      )
     }
   };
 

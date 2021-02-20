@@ -1,5 +1,5 @@
 .list-wrapper {
-  height: calc(100% - 4rem);
+  height: calc(100% - 4rem - 3rem);
   overflow: auto;
   position: relative;
   display: flex;
@@ -50,8 +50,9 @@ tr:not(:first-child):hover td:first-child:not(.expanding-row) {
 }
 
 .expanding-row:hover {
-  background-color: #f8f7ff;
-  color: '#fff';
+  /* background-color: #f8f7ff; */
+  background-color: white;
+  color: black;
 }
 
 .table-image {

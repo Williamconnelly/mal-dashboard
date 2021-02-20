@@ -1,0 +1,11 @@
+.controls-wrapper {
+  height: 3rem;
+  width: 100%;
+  background-color: #e1e7f5;
+  border-width: 1px 0px;
+  border-style: ridge;
+  border-color: #909090;
+  padding: 0.3rem 2rem;
+  box-sizing: border-box;
+  display: flex;
+}

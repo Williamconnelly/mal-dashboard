@@ -1,9 +1,10 @@
-const { app, ipcMain } = require('electron')
+const { app, ipcMain, dialog } = require('electron')
 const fs = require("fs");
 const { createAuthWindow } = require('./main/auth-window');
 const { createAppWindow } = require('./main/main-window');
 const malConfig = require('./malconfig.json');
 const { decrypt, encrypt } = require('./main/main-utils');
+const fsPromises = fs.promises;
 
 let mainWindow;
 
@@ -50,3 +51,18 @@ ipcMain.on('refresh-token', event => {
     event.reply('token-refreshed', null);
   }
 });
+
+ipcMain.handle('directory-contents', async (e, path) => {
+  return getDirectoryContents(path).then(
+    // Filter file types
+    res => res.filter(file => (file.includes('mkv') || file.includes('.mp4') || file.includes('m4v')))
+  );
+});
+
+async function getDirectoryContents(path) {
+  try {
+    return fsPromises.readdir(path);
+  } catch (err) {
+    console.error('Error occured while reading directory!', err);
+  }
+}

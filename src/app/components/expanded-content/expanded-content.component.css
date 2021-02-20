@@ -41,3 +41,51 @@
   transition: max-height 0.2s ease-in-out;
   box-sizing: border-box;
 }
+
+.display-image {
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 3px;
+  height: 300px;
+  width: 212px;
+}
+
+.episode-box {
+  height: 300px;
+  box-sizing: border-box;
+  flex: 1;
+  margin-left: 1rem;
+  border: 1px solid black;
+  overflow-y: auto;
+}
+
+.episode-row {
+  margin: 0;
+  padding: 0.5rem;
+  display: inline-block;
+}
+
+.episode-box div:hover {
+  background-color: #4065ba;
+  color: #fff;
+  cursor: pointer;
+}
+
+.episode-box div {
+  border-bottom: 1px solid black;
+  padding-left: 0.3rem;
+}
+
+.episode-box div:last-child {
+  border: none;
+}
+
+.episode-box div:hover .episode-icon {
+  color: #fff;
+}
+
+.episode-icon {
+  font-size: 1rem;
+  color: #4065ba
+}

@@ -43,6 +43,7 @@ export class ListComponent implements OnInit, AfterViewInit {
       takeUntil(this._destroy$)
     ).subscribe(
       list => {
+        this._mal.getDirectoryContents('F:\\Anime\\Houseki no Kuni');
         console.log('GOT DATA', list);
         this.list$.next(list);
         this.offset.next(null);
@@ -71,7 +72,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
+    
   }
 
   ngAfterViewInit() {

@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
+import { async } from '@angular/core/testing';
 import { ipcMain, IpcRenderer } from 'electron';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, from, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { UserList } from '../types/mal-types';
 import { IPCService } from './ipc.service';
@@ -203,8 +204,13 @@ export class MALService {
     return this.list$;
   }
 
-  public getLocalFile() {
-    
+  public getDirectoryContents(filepath: string): Observable<string[]> {
+    return from<Promise<string[]>>(this._ipc.renderer.invoke('directory-contents', filepath));
+  }
+
+  async testFunc(filepath: string) {
+    const files: Promise<string[]> = this._ipc.renderer.invoke('directory-contents', filepath);
+    return Promise.all([files]);
   }
 
   // Generate a secure random string using the browser crypto functions
