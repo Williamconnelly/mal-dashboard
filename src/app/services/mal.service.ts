@@ -203,6 +203,10 @@ export class MALService {
     return this.list$;
   }
 
+  public getLocalFile() {
+    
+  }
+
   // Generate a secure random string using the browser crypto functions
   public generateRandomString(): string {
     const array = new Uint32Array(28);
@@ -233,7 +237,5 @@ export class MALService {
     const hashed = await this.sha256(v);
     return this.base64urlencode(hashed);
   }
-
-
 
 }

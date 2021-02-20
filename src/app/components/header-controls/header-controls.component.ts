@@ -14,7 +14,7 @@ export class HeaderControlsComponent implements OnInit {
 
   constructor(private _data: DataService) {
     this.searchString$.pipe(
-      debounceTime(1000),
+      // debounceTime(1000),
       distinctUntilChanged()
     ).subscribe(
       search => {

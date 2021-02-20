@@ -1,6 +1,10 @@
 .list-wrapper {
   height: calc(100% - 4rem);
   overflow: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 table {
@@ -71,3 +75,16 @@ tr:not(:first-child):hover td:first-child:not(.expanding-row) {
   width: 100%;
 }
 
+.no-data {
+  text-align: center;
+  color: #e1e7f5;
+}
+
+.no-data-icon {
+  font-size: 10rem;
+}
+
+.no-data p {
+  margin: 1rem 0 0 0;
+  font-size: 1.5rem;
+}

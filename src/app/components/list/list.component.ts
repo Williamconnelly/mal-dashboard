@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { debounceTime, filter, map, mergeMap, scan, take, takeUntil, tap, throttleTime } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
 import { DataManagerService } from 'src/app/services/data-service/data-service-manager';
+import { MALService } from 'src/app/services/mal.service';
 import { ListNode, UserList } from 'src/app/types/mal-types';
 import { ExpandedContentComponent } from '../expanded-content/expanded-content.component';
 
@@ -36,7 +37,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
   public rowSize = 77;
 
-  constructor(private _data: DataService) {
+  constructor(private _data: DataService, private _mal: MALService) {
     this._data.getListData().pipe(
       filter(list => !!list),
       takeUntil(this._destroy$)
@@ -44,7 +45,8 @@ export class ListComponent implements OnInit, AfterViewInit {
       list => {
         console.log('GOT DATA', list);
         this.list$.next(list);
-
+        this.offset.next(null);
+        this.theEnd = false;
         const batchMap = this.offset.pipe(
           // throttleTime(500),
           mergeMap(n => {
@@ -52,7 +54,7 @@ export class ListComponent implements OnInit, AfterViewInit {
             return this.getBatch(n)
           }),
           scan((acc, batch) => {
-            // console.log(acc, batch);
+            console.log(acc, batch);
             return  [...acc, ...batch ];
           }, [])
         );
