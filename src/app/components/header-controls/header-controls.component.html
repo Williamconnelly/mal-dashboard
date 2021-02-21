@@ -8,19 +8,19 @@
       spellcheck="false"
     >
   </div>
-  <div class="header-button">
+  <div class="header-button" [routerLink]="['/stats']" [routerLinkActive]="['active']">
     <i class="header-icon far fa-chart-bar"></i>
     <p>Stats</p>
   </div>
-  <div class="header-button">
+  <div class="header-button" [routerLink]="['/list']" [routerLinkActive]="['active']">
     <i class="header-icon far fa-list-alt"></i>
     <p>Anime List</p>
   </div>
-  <div class="header-button">
+  <div class="header-button" [routerLink]="['/explore']" [routerLinkActive]="['active']">
     <i class="header-icon fas fa-search-plus"></i>
     <p>Explore</p>
   </div>
-  <div class="header-button">
+  <div class="header-button" [routerLink]="['/sakuga']" [routerLinkActive]="['active']">
     <i class="header-icon far fa-eye"></i>
     <p>Sakuga</p>
   </div>

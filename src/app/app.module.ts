@@ -11,6 +11,9 @@ import { FooterControlsComponent } from './components/footer-controls/footer-con
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ViewportResizeDirective } from './directives/viewport-resize.directive';
+import { StatsComponent } from './components/stats/stats.component';
+import { ExploreComponent } from './components/explore/explore.component';
+import { SakugaComponent } from './components/sakuga/sakuga.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,10 @@ import { ViewportResizeDirective } from './directives/viewport-resize.directive'
     ExpandedContentComponent,
     HeaderControlsComponent,
     FooterControlsComponent,
-    ViewportResizeDirective
+    ViewportResizeDirective,
+    StatsComponent,
+    ExploreComponent,
+    SakugaComponent
   ],
   imports: [
     BrowserModule,

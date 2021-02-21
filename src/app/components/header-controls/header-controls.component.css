@@ -27,6 +27,11 @@
   text-align: center;
   height: 100%;
   box-sizing: border-box;
+  outline: none;
+}
+
+.active {
+  color: #486ffd;
 }
 
 .header-button p {
@@ -46,8 +51,12 @@
   margin-right: 2rem;
 }
 
+.header-button:hover {
+  cursor: pointer;
+}
+
 .header-icon {
-  color: #4065ba;
+  color: #bdbdbd;
   font-size: 2rem;
 }
 

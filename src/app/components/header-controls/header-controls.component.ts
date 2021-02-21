@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
@@ -16,7 +17,7 @@ export class HeaderControlsComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject<boolean>();
 
-  constructor(private _data: DataService) {
+  constructor(private _data: DataService, private _router: Router) {
     this.searchString$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -39,5 +40,9 @@ export class HeaderControlsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this._destroy$.next(null);
   };
+
+  public routeTo(route: string): void {
+    this._router.navigate([route]);
+  }
 
 }
