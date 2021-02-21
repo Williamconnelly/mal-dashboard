@@ -43,8 +43,7 @@ export class ListComponent implements OnInit, AfterViewInit {
       takeUntil(this._destroy$)
     ).subscribe(
       list => {
-        this._mal.getDirectoryContents('F:\\Anime\\Houseki no Kuni');
-        console.log('GOT DATA', list);
+        // console.log('GOT DATA', list);
         this.list$.next(list);
         this.offset.next(null);
         this.theEnd = false;
@@ -55,7 +54,6 @@ export class ListComponent implements OnInit, AfterViewInit {
             return this.getBatch(n)
           }),
           scan((acc, batch) => {
-            console.log(acc, batch);
             return  [...acc, ...batch ];
           }, [])
         );

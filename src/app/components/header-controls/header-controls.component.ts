@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
 
 @Component({
@@ -8,20 +8,26 @@ import { DataService } from 'src/app/services/data-service/data-service';
   templateUrl: './header-controls.component.html',
   styleUrls: ['./header-controls.component.css']
 })
-export class HeaderControlsComponent implements OnInit {
+export class HeaderControlsComponent implements OnInit, OnDestroy {
 
   private searchString$ = new Subject<string>();
 
+  public searchString = '';
+
+  private _destroy$ = new Subject<boolean>();
+
   constructor(private _data: DataService) {
     this.searchString$.pipe(
-      // debounceTime(1000),
-      distinctUntilChanged()
+      debounceTime(200),
+      distinctUntilChanged(),
+      takeUntil(this._destroy$)
     ).subscribe(
       search => {
         this._data.filterListByName(search);
       }
     )
   }
+
   ngOnInit() {
 
   }
@@ -29,5 +35,9 @@ export class HeaderControlsComponent implements OnInit {
   public searchFieldChanged(search: string): void {
     this.searchString$.next(search);
   }
+
+  ngOnDestroy() {
+    this._destroy$.next(null);
+  };
 
 }
