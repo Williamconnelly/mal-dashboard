@@ -1,3 +1,19 @@
 <div class="controls-wrapper">
-  
+  <div class='search-wrapper'>
+    <i class="search-icon fas fa-filter"></i>
+    <input 
+      class="searchbar" 
+      type="text" 
+      [(ngModel)]="searchString" 
+      (ngModelChange)="searchFieldChanged($event)" 
+      spellcheck="false"
+    >
+  </div>
+  <!-- <div class="tooltip-icon"> -->
+    <i class="tooltip-icon fas fa-question-circle"></i>
+  <!-- </div> -->
+  <div id="tooltip">
+    <p>Filter types: Type, Genre, Status, Score, Studio.</p>
+    <i>Example - type:tv, studio:toei_animation,trigger, score:8</i>
+  </div>
 </div>

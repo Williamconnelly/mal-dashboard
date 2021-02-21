@@ -8,4 +8,66 @@
   padding: 0.3rem 2rem;
   box-sizing: border-box;
   display: flex;
+  position: fixed;
+  bottom: 0;
+}
+
+.searchbar {
+  margin-top: 0.25rem;
+  width: 8rem;
+  border: 1px solid #4065ba;
+  padding: 3px 3px 3px 26px;
+  height: 26px;
+  outline-color: #4065ba;
+  color: black;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  transition: all cubic-bezier(0.3, 0.7, 0.9, 1) 0.2s;
+  box-sizing: border-box;
+}
+
+.searchbar:focus {
+  width: 20rem;
+}
+
+.search-wrapper {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  color: #4065ba;
+  font-size: 0.8rem;
+  top: 10px;
+  left: 6px;
+  border-right: 1px solid #cacaca;
+  padding-right: 0.2rem;
+}
+
+.tooltip-icon {
+  font-size: 1rem;
+  color: #4065ba;
+  margin: 0.5rem 0px 0px 0.5rem;
+  box-sizing: border-box;
+}
+
+#tooltip {
+  visibility: hidden;
+  transition: opacity 0.3s;
+  opacity: 0;
+  font-size: 0.7rem;
+  margin-left: 0.8rem;
+}
+
+.tooltip-icon:hover {
+  cursor: pointer;
+}
+
+.tooltip-icon:hover + #tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+#tooltip p {
+  margin: 0;
 }
