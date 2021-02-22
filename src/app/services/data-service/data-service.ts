@@ -165,8 +165,16 @@ export class DataService {
     this._destroy$.next(null);
   };
 
-  public updateMediaConfig<T>(id: number, property: string, updateValue: T): void {
-    this.mediaConfigMap[id][property] = updateValue;
+  public updateMediaConfig(id: number, property: string, updateValue: any): void {
+    if (this.mediaConfigMap) {
+      this.mediaConfigMap[id][property] = updateValue;
+    } else {
+      if (property === 'filepath') {
+        this.mediaConfigMap = {[id]: {
+          filepath: updateValue
+        }};
+      }
+    }
   }
 
   private getMediaConfigMap(): void {
@@ -182,8 +190,12 @@ export class DataService {
   }
 
   public getMediaConfig(id: number): MediaConfig {
-    return this.mediaConfigMap[id];
+    return this.mediaConfigMap ? this.mediaConfigMap[id] : null;
   }
+
+  public getScoreDifferential(userScore: number, meanScore: number): number {
+    return +(userScore - meanScore).toFixed(2);
+  };
 
 }
 

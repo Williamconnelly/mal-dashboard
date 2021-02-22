@@ -71,7 +71,13 @@ export class MALService {
     'related_manga',
     'recommendations',
     'studios',
-    'statistics'
+    'statistics',
+    // (?) Missing (?)
+    // Staff
+    // Characters
+    // my_list_status.num_times_rewatched
+    // my_list_status.start_date,
+    // my_list_status.finish_date
   ];
 
   constructor(
