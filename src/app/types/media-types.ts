@@ -1,3 +1,7 @@
+export interface MediaConfigMap {
+  [key: number]: MediaConfig
+}
+
 export interface MediaConfig {
   filepath: string;
   sakuga_title?: string,

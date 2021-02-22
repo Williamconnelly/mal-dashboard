@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
+import { MediaConfig, MediaConfigMap } from 'src/app/types/media-types';
 import { ListNode, UserList } from '../../types/mal-types';
+import { IPCService } from '../ipc.service';
 import { MALService } from '../mal.service';
 
 class ListFilter {
@@ -40,7 +42,9 @@ export class DataService {
 
   private currentSearch: string;
 
-  constructor(private _mal: MALService) {
+  private mediaConfigMap: MediaConfigMap;
+
+  constructor(private _mal: MALService, private _ipc: IPCService) {
     this._mal.getListData().pipe(
       filter(list => !!list),
       takeUntil(this._destroy$)
@@ -160,6 +164,26 @@ export class DataService {
   ngOnDestroy() {
     this._destroy$.next(null);
   };
+
+  public updateMediaConfig<T>(id: number, property: string, updateValue: T): void {
+    this.mediaConfigMap[id][property] = updateValue;
+  }
+
+  private getMediaConfigMap(): void {
+    this._ipc.renderer.invoke('media-config').then(
+      (map: MediaConfigMap) => {
+        this.mediaConfigMap = map;
+      }
+    ).catch(
+      err => {
+        console.error('Failed to get Config Map', err); 
+      }
+    );
+  }
+
+  public getMediaConfig(id: number): MediaConfig {
+    return this.mediaConfigMap[id];
+  }
 
 }
 
