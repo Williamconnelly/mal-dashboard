@@ -83,6 +83,7 @@ export class ExpandedContentComponent implements OnInit, AfterViewInit, OnDestro
           this.episodes$.next(res);
         },
         err => {
+          // TODO: Handle Error dispaly here
           console.error(err);
         }
       )

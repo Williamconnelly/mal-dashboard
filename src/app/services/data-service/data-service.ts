@@ -153,6 +153,10 @@ export class DataService {
     return copy;
   }
 
+  public getListNode(id: number): ListNode {
+    return this.userList$.value.find(node => node.id === id);
+  }
+
   ngOnDestroy() {
     this._destroy$.next(null);
   };

@@ -1,0 +1,8 @@
+<div class="back-button" (click)="goBack()">
+  <i class="fas fa-arrow-left"></i>
+  <p>Return to List</p>
+</div>
+
+<ng-container *ngIf="media$ | async as media">
+  <p>{{media.title}}</p>
+</ng-container>

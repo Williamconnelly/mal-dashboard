@@ -47,7 +47,7 @@ export interface RecommendedNode {
 }
 
 export interface ListNode {
-  id: string;
+  id: number;
   title: string;
   main_picture: MALImage;
   alternative_titles: {

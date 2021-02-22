@@ -1,5 +1,6 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { debounceTime, filter, map, mergeMap, scan, take, takeUntil, tap, throttleTime } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
@@ -37,14 +38,20 @@ export class ListComponent implements OnInit, AfterViewInit {
 
   public rowSize = 77;
 
-  constructor(private _data: DataService, private _mal: MALService) {
+  constructor(
+    private _data: DataService, 
+    private _mal: MALService,
+    private _router: Router,
+    private _activeRoute: ActivatedRoute,
+    private _cd: ChangeDetectorRef
+  ) {
     this._data.getListData().pipe(
       filter(list => !!list),
       takeUntil(this._destroy$)
     ).subscribe(
       list => {
-        // console.log('GOT DATA', list);
         this.list$.next(list);
+        // this._cd.detectChanges();
         this.offset.next(null);
         this.theEnd = false;
         const batchMap = this.offset.pipe(
@@ -77,7 +84,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
   }
 
-  public toggleExpandedContent(id: string): void {
+  public toggleExpandedContent(id: number): void {
     // this.expandedContent.toArray()[].toggleExpansion();
     this.expandedContent.toArray().find(c => c.listNode.id === id).toggleExpansion();
   };
@@ -102,7 +109,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public getBatch(lastId: string): Observable<ListNode[]> {
+  public getBatch(lastId: number): Observable<ListNode[]> {
     let arrayAfterIndex: ListNode[];
     if (lastId !== null) {
       const currentIndex = this.list$.value.findIndex(node => node.id === lastId) + 1;

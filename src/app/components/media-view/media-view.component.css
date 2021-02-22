@@ -1,0 +1,18 @@
+.back-button {
+  color: #e1e7f5;
+  padding: 0.5rem;
+}
+
+.back-button p {
+  margin: 0;
+  display: inline-block;
+}
+
+.back-button:hover {
+  cursor: pointer;
+  color: #4065ba;
+}
+
+.back-button .fa-arrow-left {
+  margin-right: 0.5rem;
+}

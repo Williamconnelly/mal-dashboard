@@ -14,6 +14,7 @@ import { ViewportResizeDirective } from './directives/viewport-resize.directive'
 import { StatsComponent } from './components/stats/stats.component';
 import { ExploreComponent } from './components/explore/explore.component';
 import { SakugaComponent } from './components/sakuga/sakuga.component';
+import { MediaViewComponent } from './components/media-view/media-view.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SakugaComponent } from './components/sakuga/sakuga.component';
     ViewportResizeDirective,
     StatsComponent,
     ExploreComponent,
-    SakugaComponent
+    SakugaComponent,
+    MediaViewComponent
   ],
   imports: [
     BrowserModule,

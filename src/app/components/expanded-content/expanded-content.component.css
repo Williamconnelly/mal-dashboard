@@ -58,15 +58,16 @@
   margin-left: 1rem;
   border: 1px solid black;
   overflow-y: auto;
+  font-size: 1.1rem;
 }
 
-.episode-row {
+.episode-row p {
   margin: 0;
   padding: 0.5rem;
   display: inline-block;
 }
 
-.episode-box div:hover {
+.episode-row:hover {
   background-color: #4065ba;
   color: #fff;
   cursor: pointer;
@@ -88,4 +89,23 @@
 .episode-icon {
   font-size: 1rem;
   color: #4065ba
+}
+
+.no-data {
+  text-align: center;
+  color: #e1e7f5;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.no-data-icon {
+  font-size: 7rem;
+}
+
+.no-data p {
+  margin: 1rem 0 0 0;
+  font-size: 1.3rem;
 }

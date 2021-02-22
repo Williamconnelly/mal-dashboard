@@ -8,13 +8,18 @@
     <div class="display-image" [ngStyle]="{'background-image':'url(' + listNode.main_picture.large + ')'}"></div>
     <div class="episode-box">
       <ng-container *ngIf="episodes$ | async as episodes; else NoEpisodes">
-        <div *ngFor="let episode of episodes">
+        <div class="episode-row" *ngFor="let episode of episodes">
           <i class="episode-icon far fa-play-circle"></i>
-          <p class="episode-row">{{episode}}</p>
+          <p>{{episode}}</p>
         </div>
       </ng-container>
       <ng-template #NoEpisodes>
-        <p>No Episodes</p>
+        <div class="no-data">
+          <div>
+            <i class="no-data-icon far fa-times-circle"></i>
+            <p>No Episodes</p>
+          </div>
+        </div>
       </ng-template>
     </div>
   </div>

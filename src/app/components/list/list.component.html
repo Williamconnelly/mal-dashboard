@@ -5,10 +5,11 @@
         <table>
           <tr class="table-header-row">
             <th style="width: 10%;">Image</th>
-            <th style="width: 60%;">Title</th>
+            <th style="width: 50%;">Title</th>
             <th style="width: 10%;">Score</th>
-            <th style="width: 10%;">Format</th>
+            <th style="width: 10%;">Type</th>
             <th style="width: 10%;">Status</th>
+            <th style="width: 10%;"></th>
           </tr>
           <ng-container *cdkVirtualFor="let media of nodes; let i = index; templateCacheSize: 0">
             <tr (click)="toggleExpandedContent(media.id)" class="table-body-row">
@@ -16,21 +17,27 @@
                 <td style="width: 10%;">
                   <div class="table-image" [ngStyle]="{'background-image':'url(' + media.main_picture.medium + ')'}"></div>
                 </td>
-                <td style="width: 60%;">{{media.title}}</td>
+                <td style="width: 50%;">{{media.title}}</td>
                 <td style="width: 10%;">{{media.my_list_status.score || '--'}}</td>
                 <td style="width: 10%;">{{media.media_type | uppercase}}</td>
                 <td style="width: 10%;">{{media.my_list_status.status | titlecase}}</td>
+                <td style="width: 10%">
+                  <div [routerLink]="['/list', media.id]" style="outline: none; display: inline-block;">
+                    <i class="edit-icon far fa-edit"></i>
+                  </div>
+                </td>
               </ng-container>
               <ng-container *ngIf="!media">
                 <td style="width: 10%;">Loading...</td>
-                <td style="width: 60%;">Loading...</td>
+                <td style="width: 50%;">Loading...</td>
+                <td style="width: 10%;">Loading...</td>
                 <td style="width: 10%;">Loading...</td>
                 <td style="width: 10%;">Loading...</td>
                 <td style="width: 10%;">Loading...</td>
               </ng-container>
             </tr>
             <tr class="expanding-row-container">
-              <td colspan="5" class="expanding-row">
+              <td colspan="6" class="expanding-row">
                 <app-expanded-content #expandedContent [listNode]="media"></app-expanded-content>
               </td>
             </tr>

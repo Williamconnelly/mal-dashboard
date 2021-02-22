@@ -208,11 +208,6 @@ export class MALService {
     return from<Promise<string[]>>(this._ipc.renderer.invoke('directory-contents', filepath));
   }
 
-  async testFunc(filepath: string) {
-    const files: Promise<string[]> = this._ipc.renderer.invoke('directory-contents', filepath);
-    return Promise.all([files]);
-  }
-
   // Generate a secure random string using the browser crypto functions
   public generateRandomString(): string {
     const array = new Uint32Array(28);

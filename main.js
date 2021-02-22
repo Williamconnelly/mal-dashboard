@@ -4,6 +4,7 @@ const { createAuthWindow } = require('./main/auth-window');
 const { createAppWindow } = require('./main/main-window');
 const malConfig = require('./malconfig.json');
 const { decrypt, encrypt } = require('./main/main-utils');
+const { exception } = require('console');
 const fsPromises = fs.promises;
 
 let mainWindow;
@@ -63,6 +64,6 @@ async function getDirectoryContents(path) {
   try {
     return fsPromises.readdir(path);
   } catch (err) {
-    console.error('Error occured while reading directory!', err);
+    throw new exception('getDirectoryContents - Failed to read directory')
   }
 }
