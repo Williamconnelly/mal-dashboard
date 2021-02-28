@@ -6,24 +6,58 @@
       <p>Return to List</p>
     </div>
   </div>
-  <div class="media-details">
-    <div class="display-image" [ngStyle]="{'background-image':'url(' + media.main_picture.large + ')'}"></div>
-    <div class="details-container">
-      <div class="media-window">
-        <p>Premiered: {{media.start_season.year}} {{media.start_season.season | titlecase}}</p>
-        <p>Score: {{media.mean}} (Ranked: {{media.rank}})</p>
-        <p>Format: {{media.media_type | uppercase}}</p>
-        <p>Popularity: #{{media.popularity}} ({{media.num_list_users}} members)</p>
-        <p>Status: {{media.status}}</p>
+  <div class="media-body">
+    <div class="media-stats">
+      <div class="display-image" [ngStyle]="{'background-image':'url(' + media.main_picture.large + ')'}"></div>
+      <div class="details-container">
+        <p><span class="label">Format: </span>{{media.media_type | uppercase}}</p>
+        <p><span class="label">Score: </span>{{media.mean}} (Ranked: {{media.rank}})</p>
+        <p><span class="label">Status: </span>{{getMediaStatus(media.status)}}</p>
+        <p><span class="label">Popularity: </span>#{{media.popularity}} ({{media.num_list_users}} members)</p>
+        <p><span class="label">Premiered: </span>{{media.start_season.year}} {{media.start_season.season | titlecase}}</p>
+        <p><span class="label">Aired: </span>{{media.start_date | date:'longDate'}} {{media.media_type !== 'movie' ? media.end_date ? ' - ' + (media.end_date | date:'longDate') : ' - N/A' : ''}}</p>
+        <p><span class="label">{{media.media_type === 'movie' ? 'Runtime: ' : 'Episode Duration: '}}</span>{{getMediaDuration(media.average_episode_duration)}} Minutes</p>
+        <p><span class="label">Studios: </span><span *ngFor="let studio of media.studios; let i = index">{{studio.name}}{{media.studios.length - 1 !== i ? ', ' : ''}}</span></p>
+        <p><span class="label">Genres: </span><span *ngFor="let genre of media.genres; let i = index">{{genre.name}}{{media.genres.length - 1 !== i ? ', ' : ''}}</span></p>
       </div>
-      <div class="media-user-window">
-        <p>Score: {{media.my_list_status.score || '--'}} <span *ngIf="media.my_list_status.score">(<span [ngClass]="scoreDifferential > 0 ? 'positive' : 'negative'">{{scoreDifferential > 0 ? '+' : ''}}{{scoreDifferential}}</span>)</span></p>
-        <p>Status: {{media.my_list_status.status | titlecase}}</p>
-        <p>Progress: {{media.my_list_status.num_episodes_watched}}/{{media.num_episodes}}</p>
+    </div>
+    <div class="media-view">
+      <div class="view-header">
+        <p><span class="label">Score: </span>{{media.my_list_status.score || '--'}} 
+          <span *ngIf="media.my_list_status.score">(
+            <span [ngClass]="scoreDifferential > 0 ? 'positive' : 'negative'">{{scoreDifferential > 0 ? ' + ' : ''}}{{scoreDifferential}} </span>
+          )</span>
+        </p>
+        <p><span class="label">Status: </span>{{media.my_list_status.status | titlecase}}</p>
+        <p><span class="label">Progress: </span>{{media.my_list_status.num_episodes_watched}} / {{media.num_episodes}}</p>
+      </div>
+      <div class="view-body">
+        <!-- TEMP -->
+        <div>
+          <button (click)="createDirectory(media.title)">Create Folder</button>
+          <button>Set Path</button>
+          <button>Create Links</button>
+        </div>
+        <!-- TEMP -->
+        <div class="episode-container">
+          <ng-container *ngIf="episodes$ | async as episodes; else NoEpisodes">
+            <div class="episode-row" *ngFor="let episode of episodes">
+              <i class="episode-icon far fa-play-circle"></i>
+              <p>{{episode}}</p>
+            </div>
+          </ng-container>
+          <ng-template #NoEpisodes>
+            <div class="no-data">
+              <div>
+                <i class="no-data-icon far fa-times-circle"></i>
+                <p>No Episodes</p>
+              </div>
+            </div>
+          </ng-template>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 <ng-template #NoData>
   <div class="no-data">

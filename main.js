@@ -67,3 +67,8 @@ async function getDirectoryContents(path) {
     throw new exception('getDirectoryContents - Failed to read directory')
   }
 }
+
+ipcMain.handle('create-directory', async (e, id) => {
+  console.log(id);
+  return false;
+});

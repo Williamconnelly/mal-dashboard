@@ -35,6 +35,11 @@ export interface RecommendedNode {
   num_recommendations: number;
 }
 
+export enum MediaStatus {
+  currently_airing = 'Currently Airing',
+  finished_airing = 'Finished Airing'
+}
+
 export interface ListNode {
   id: number;
   title: string;
