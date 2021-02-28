@@ -68,7 +68,58 @@ async function getDirectoryContents(path) {
   }
 }
 
-ipcMain.handle('create-directory', async (e, id) => {
-  console.log(id);
-  return false;
+ipcMain.handle('set-directory', async e => {
+  return dialog.showOpenDialog(mainWindow, { properties: ['openDirectory']}).then(
+    pathResponse => {
+      if (!pathResponse.canceled && pathResponse.filePaths.length) {
+        return pathResponse.filePaths[0];
+      } else {
+        return null;
+      }
+    }
+  ).catch (
+    err => err
+  );
 });
+
+ipcMain.handle('get-media-config', async e => {
+  return await fsPromises.readFile('./mediaconfig.json', 'utf-8');
+});
+
+ipcMain.handle('set-media-config', async (e, config) => {
+  return await fsPromises.writeFile('mediaconfig.json', JSON.stringify(config), 'utf-8').then(
+    res => {
+      console.log('Updated config');
+      return res;
+    }
+  ).catch(
+    err => {
+      console.log('Failed to update config', err);
+      throw err;
+    }
+  )
+  // return fs.writeFile('mediaconfig.json', JSON.stringify(config), 'utf-8', err => {
+  //   if (err) {
+  //     console.log('Failed to update media config', err);
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // });
+});
+
+function checkFile(filename) {
+  fs.open(filename, 'r', (err, fd) => {
+    if (err) {
+      fs.writeFile(filename, '', err => {
+        if (err) {
+          console.log('Failed to create file');
+        } else {
+          console.log('Created File!');
+        }
+      });
+    } else {
+      console.log('File Exists!');
+    }
+  })
+}

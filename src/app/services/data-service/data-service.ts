@@ -59,7 +59,19 @@ export class DataService {
       err => {
         console.error(err);
       }
+    );
+
+    this._ipc.renderer.invoke('get-media-config').then(
+      (map: string) => {
+        const mapData = (JSON.parse(map) as MediaConfigMap);
+        console.log('Got config', mapData);
+      }
+    ).catch(
+      err => {
+        console.error('Failed to retrieve config', err);
+      }
     )
+
   }
 
   public getListData(): Observable<ListNode[]> {
@@ -178,13 +190,25 @@ export class DataService {
   }
 
   private getMediaConfigMap(): void {
-    this._ipc.renderer.invoke('media-config').then(
+    this._ipc.renderer.invoke('get-media-config').then(
       (map: MediaConfigMap) => {
         this.mediaConfigMap = map;
       }
     ).catch(
       err => {
         console.error('Failed to get Config Map', err); 
+      }
+    );
+  }
+
+  private setMediaConfigMap(): void {
+    this._ipc.renderer.invoke('set-media-config').then(
+      (result: boolean) => {
+       console.log('Media Config File Updated', result);
+      }
+    ).catch(
+      err => {
+        console.error('Failed to update Config Map', err); 
       }
     );
   }

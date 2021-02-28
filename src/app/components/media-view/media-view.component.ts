@@ -72,10 +72,10 @@ export class MediaViewComponent implements OnInit {
     this.goBack();
   }
 
-  public createDirectory(name: string): void {
-    this._ipc.renderer.invoke('create-directory', name).then(
-      (result: boolean) => {
-        console.log(result);
+  public setDirectory(): void {
+    this._ipc.renderer.invoke('set-directory').then(
+      (path: string) => {
+        console.log(path);
       }
     ).catch(
       err => {
