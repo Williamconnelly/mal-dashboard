@@ -38,11 +38,13 @@ export class DataService {
     'studio'
   ];
 
-  private activeFilters: ListFilter[];
-
-  private currentSearch: string;
-
   private mediaConfigMap: MediaConfigMap;
+
+  private filterState = {
+    name: '',
+    queryFilters: [],
+    hasEpisodes: false
+  }
 
   constructor(private _mal: MALService, private _ipc: IPCService) {
     this._mal.getListData().pipe(
@@ -63,75 +65,76 @@ export class DataService {
 
     this._ipc.renderer.invoke('get-media-config').then(
       (map: string) => {
-        const mapData = (JSON.parse(map) as MediaConfigMap);
-        console.log('Got config', mapData);
+        console.log('Got config', JSON.parse(map));
+        this.mediaConfigMap = (JSON.parse(map) as MediaConfigMap);
       }
     ).catch(
       err => {
         console.error('Failed to retrieve config', err);
       }
     )
-
   }
 
   public getListData(): Observable<ListNode[]> {
     return this.displayList$;
   }
 
+  private filterList(): void {
+    // Stage 1 - Check if hasEpisodes filter is active
+    let filteredList = [...this.userList$.value];
+    if (this.filterState.hasEpisodes) {
+      filteredList = this.filterListByMap(filteredList);
+    }
+    // Stage 2 - Check if name filter is active
+    if (this.filterState.name) {
+      filteredList = filteredList.filter(media => media.title.toLowerCase().includes(this.filterState.name.toLowerCase()))
+    }
+    // Stage 3 - Check if query filter is active
+    if (this.filterState.queryFilters && this.filterState.queryFilters.length) {
+      filteredList = this.getListFromFilters(filteredList, this.filterState.queryFilters);
+    }
+    // Filtering Complete
+    this.displayList$.next(filteredList);
+  }
+
   public filterListByName(filter: string): void {
-    this.currentSearch = filter;
-    if (filter) {
-      const filterList = [...this.userList$.value].filter(media => media.title.toLowerCase().includes(filter.toLowerCase()));
-      if ((this.activeFilters && this.activeFilters.length)) {
-        // Filter by name & filters
-        this.displayList$.next(this.getListFromFilters(filterList, this.activeFilters));
-      } else {
-        // Filter by name
-        this.displayList$.next(filterList);
-      }
-    } else if ((this.activeFilters && this.activeFilters.length)) {
-      const filterList = this.currentSearch ? [...this.userList$.value].filter(media => media.title.toLowerCase().includes(this.currentSearch.toLowerCase())) : [...this.userList$.value];
-      // Filter by filters
-      console.log('Filtering by filters');
-      this.displayList$.next(this.getListFromFilters(filterList, this.activeFilters));
+    this.filterState.name = filter || '';
+    this.filterList();
+  }
+
+  public filterListByQuery(query: string): void {
+    if (query) {
+      // Split query segments by whitespace
+      const subStrings = query.split(/\s+/g);
+      // Create filters
+      const listFilters = subStrings.reduce<ListFilter[]>((filters, subStr) => {
+        // Find param
+        const queryParam = subStr.substring(0, subStr.indexOf(':'));
+        // If invalid param, return
+        if (!this.validFilterParameters.includes(queryParam)) {
+          return filters;
+        }
+        // Get values array
+        let values = subStr.substring(subStr.indexOf(':') + 1).split(',');
+        // Replace underscore w/ whitespace + toLowerCase
+        values = values.map(val => val.toLowerCase().replace(/_/g, ' '));
+        // Add new filter
+        filters.push(new ListFilter(queryParam, values));
+        return filters;
+      }, []);
+      // Update filters
+      this.filterState.queryFilters = listFilters;
+      this.filterList();
     } else {
-      this.currentSearch = null;
-      // No filters provided. Send base list
-      this.displayList$.next(this.userList$.value);
+      // Clear filters
+      this.filterState.queryFilters = null;
+      this.filterList();
     }
   }
-  
-  public filterListByQuery(query: string) {
-   if (query) {
-      // Split query segments by whitespace
-    const subStrings = query.split(/\s+/g);
-    // Create filters
-    const listFilters = subStrings.reduce<ListFilter[]>((filters, subStr) => {
-      // Find param
-      const queryParam = subStr.substring(0, subStr.indexOf(':'));
-      // If invalid param, return
-      if (!this.validFilterParameters.includes(queryParam)) {
-        return filters;
-      }
-      // Get values array
-      let values = subStr.substring(subStr.indexOf(':') + 1).split(',');
-      // Replace underscore w/ whitespace + toLowerCase
-      values = values.map(val => val.toLowerCase().replace(/_/g, ' '));
-      // Add new filter
-      filters.push(new ListFilter(queryParam, values));
-      return filters;
-    }, []);
-    // Update filters
-    this.activeFilters = listFilters;
-    // Check if there's an existing name filter
-    const filterList = this.currentSearch ? [...this.userList$.value].filter(media => media.title.toLowerCase().includes(this.currentSearch.toLowerCase())) : [...this.userList$.value];
-    // Pass list from filter function
-    this.displayList$.next(this.getListFromFilters(filterList, this.activeFilters));
-   } else {
-    // No filter string provided, clear filters
-    this.activeFilters = null;
-    this.filterListByName(this.currentSearch);
-   }
+
+  public filterListByHasEpisodes(state: boolean): void {
+    this.filterState.hasEpisodes = state;
+    this.filterList();
   }
 
   private filterListByMediaType(list: ListNode[], filter: ListFilter): ListNode[] {
@@ -152,6 +155,11 @@ export class DataService {
 
   private filterListByStudio(list: ListNode[], filter: ListFilter): ListNode[] {
     return [...list].filter(node => node.studios.some(studio => filter.values.includes(studio.name.toLowerCase())));
+  }
+
+  private filterListByMap(list: ListNode[]): ListNode[] {
+    const mapIds = Object.keys(this.mediaConfigMap).map(key => +key);
+    return [...list].filter(node => mapIds.includes(node.id));
   }
 
   private getListFromFilters(list: ListNode[], filters: ListFilter[]): ListNode[] {
@@ -179,7 +187,13 @@ export class DataService {
 
   public updateMediaConfig(id: number, property: string, updateValue: any): void {
     if (this.mediaConfigMap) {
-      this.mediaConfigMap[id][property] = updateValue;
+      if (this.mediaConfigMap[id]) {
+        this.mediaConfigMap[id][property] = updateValue;
+      } else if (property === 'filepath') {
+        this.mediaConfigMap[id] = {
+          filepath: updateValue
+        };
+      }
     } else {
       if (property === 'filepath') {
         this.mediaConfigMap = {[id]: {
@@ -187,6 +201,16 @@ export class DataService {
         }};
       }
     }
+    // Update config file
+    this._ipc.renderer.invoke('set-media-config', JSON.stringify(this.mediaConfigMap)).then(
+      res => {
+        console.log('SUCCESS! Updated Config File');
+      }
+    ).catch(
+      err => {
+        console.error('Failed to update config file', err);
+      }
+    )
   }
 
   private getMediaConfigMap(): void {

@@ -40,7 +40,7 @@
         <!-- TEMP -->
         <div class="episode-container">
           <ng-container *ngIf="episodes$ | async as episodes; else NoEpisodes">
-            <div class="episode-row" *ngFor="let episode of episodes">
+            <div class="episode-row" *ngFor="let episode of episodes" (click)="playVideo(episode)">
               <i class="episode-icon far fa-play-circle"></i>
               <p>{{episode}}</p>
             </div>

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { DataService } from 'src/app/services/data-service/data-service';
 import { ListNode, MediaStatus } from 'src/app/types/mal-types';
@@ -24,28 +24,15 @@ export class MediaViewComponent implements OnInit {
 
   public episodes$ = new BehaviorSubject<string[]>(null);
 
+  @ViewChild('player', {static: false}) videoPlayer: ElementRef<HTMLVideoElement>
+
   constructor(
     private _location: Location, 
     private _data: DataService, 
     private _route: ActivatedRoute,
     private _mal: MALService,
     private _ipc: IPCService
-  ) { 
-    if (!this.episodes$.value) {
-      // TODO: Replace with correct file path logic
-      this._mal.getDirectoryContents('F:\\Anime\\Houseki no Kuni').pipe(
-        take(1)
-      ).subscribe(
-        res => {
-          this.episodes$.next(res);
-        },
-        err => {
-          // TODO: Handle Error dispaly here
-          console.error(err);
-        }
-      )
-    }
-  }
+  ) { }
 
   ngOnInit() {
     const media = this._data.getListNode(parseInt(this._route.snapshot.paramMap.get('id'), 10));
@@ -54,6 +41,12 @@ export class MediaViewComponent implements OnInit {
     const config = this._data.getMediaConfig(this.media$.value.id);
     this.mediaConfig = config || null;
     this.scoreDifferential = this._data.getScoreDifferential(this.media$.value.my_list_status.score, this.media$.value.mean);
+
+    // Setup Media Config
+    if (!this.episodes$.value || this.mediaConfig) {
+      this.getEpisodes();
+    }
+
   }
 
   public goBack(): void {
@@ -76,12 +69,38 @@ export class MediaViewComponent implements OnInit {
     this._ipc.renderer.invoke('set-directory').then(
       (path: string) => {
         console.log(path);
+        this._data.updateMediaConfig(this.media$.value.id, 'filepath', path);
+        this.getEpisodes();
       }
     ).catch(
       err => {
         console.error(err);
       }
     )
+  }
+
+  private getEpisodes(): void {
+    const config = this._data.getMediaConfig(this.media$.value.id);
+    if (config) {
+      // Found configuration
+      this.mediaConfig = config;
+      this._mal.getDirectoryContents(this.mediaConfig.filepath).pipe(
+        take(1)
+      ).subscribe(
+        episodes => {
+          this.episodes$.next(episodes);
+        },
+        err => {
+          console.error('Failed to fetch media files', err);
+          // TODO: Handle error display
+        }
+      )
+    }
+  }
+
+  public playVideo(filename: string): void {
+    // TODO: Play Video
+    const url = `${this.mediaConfig.filepath}\\${filename}`;
   }
 
 }

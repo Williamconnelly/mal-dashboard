@@ -3,7 +3,7 @@ export interface MediaConfigMap {
 }
 
 export interface MediaConfig {
-  filepath: string;
+  filepath?: string;
   sakuga_title?: string,
   links?: MediaLink[];
 }

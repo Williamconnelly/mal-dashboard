@@ -1,8 +1,10 @@
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
+import { DataService } from 'src/app/services/data-service/data-service';
 import { MALService } from 'src/app/services/mal.service';
 import { ListNode } from 'src/app/types/mal-types';
+import { MediaConfig } from 'src/app/types/media-types';
 
 @Component({
   selector: 'app-expanded-content',
@@ -31,7 +33,9 @@ export class ExpandedContentComponent implements OnInit, AfterViewInit, OnDestro
 
   public episodes$ = new BehaviorSubject<string[]>(null);
 
-  constructor(private _renderer: Renderer2, private _mal: MALService) { }
+  private mediaConfig: MediaConfig;
+
+  constructor(private _renderer: Renderer2, private _mal: MALService, private _data: DataService) { }
 
   ngOnInit() {
     // When closed, this callback will set the height to 0 and trigger the animation callback.
@@ -76,17 +80,25 @@ export class ExpandedContentComponent implements OnInit, AfterViewInit, OnDestro
       this.expanded ? this.expandedController$.next(this.expanded) : this.closeExpanded$.next(this.expanded);
     }
     if (!this.episodes$.value) {
-      this._mal.getDirectoryContents('F:\\Anime\\Houseki no Kuni').pipe(
-        take(1)
-      ).subscribe(
-        res => {
-          this.episodes$.next(res);
-        },
-        err => {
-          // TODO: Handle Error dispaly here
-          console.error(err);
+      // Setup Media Config
+      if (!this.episodes$.value || this.mediaConfig) {
+        const config = this._data.getMediaConfig(this.listNode.id);
+        if (config) {
+          // Found configuration
+          this.mediaConfig = config;
+          this._mal.getDirectoryContents(this.mediaConfig.filepath).pipe(
+            take(1)
+          ).subscribe(
+            episodes => {
+              this.episodes$.next(episodes);
+            },
+            err => {
+              console.error('Failed to fetch media files', err);
+              // TODO: Handle error display
+            }
+          )
         }
-      )
+      }
     }
   };
 

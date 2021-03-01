@@ -87,25 +87,7 @@ ipcMain.handle('get-media-config', async e => {
 });
 
 ipcMain.handle('set-media-config', async (e, config) => {
-  return await fsPromises.writeFile('mediaconfig.json', JSON.stringify(config), 'utf-8').then(
-    res => {
-      console.log('Updated config');
-      return res;
-    }
-  ).catch(
-    err => {
-      console.log('Failed to update config', err);
-      throw err;
-    }
-  )
-  // return fs.writeFile('mediaconfig.json', JSON.stringify(config), 'utf-8', err => {
-  //   if (err) {
-  //     console.log('Failed to update media config', err);
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // });
+  return await fsPromises.writeFile('./mediaconfig.json', config, 'utf-8');
 });
 
 function checkFile(filename) {
