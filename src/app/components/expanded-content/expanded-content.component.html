@@ -8,7 +8,7 @@
     <div class="display-image" [ngStyle]="{'background-image':'url(' + listNode.main_picture.large + ')'}"></div>
     <div class="episode-box">
       <ng-container *ngIf="episodes$ | async as episodes; else NoEpisodes">
-        <div class="episode-row" *ngFor="let episode of episodes">
+        <div class="episode-row" *ngFor="let episode of episodes" (click)="playVideo(episode)">
           <i class="episode-icon far fa-play-circle"></i>
           <p>{{episode}}</p>
         </div>

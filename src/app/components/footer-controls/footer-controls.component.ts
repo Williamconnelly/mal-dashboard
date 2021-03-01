@@ -41,6 +41,10 @@ export class FooterControlsComponent implements OnInit {
     this.searchString$.next('');
   }
 
+  public toggleEpisodeFilter(state: boolean): void {
+    this._data.filterListByHasEpisodes(state);
+  }
+
   ngOnDestroy() {
     this._destroy$.next(null);
   };

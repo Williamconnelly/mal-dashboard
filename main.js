@@ -1,4 +1,4 @@
-const { app, ipcMain, dialog } = require('electron')
+const { app, ipcMain, dialog, shell } = require('electron')
 const fs = require("fs");
 const { createAuthWindow } = require('./main/auth-window');
 const { createAppWindow } = require('./main/main-window');
@@ -105,3 +105,7 @@ function checkFile(filename) {
     }
   })
 }
+
+ipcMain.handle('open-file', (e, path) => {
+  return shell.openExternal(path);
+})

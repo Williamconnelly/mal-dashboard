@@ -99,8 +99,8 @@ export class MediaViewComponent implements OnInit {
   }
 
   public playVideo(filename: string): void {
-    // TODO: Play Video
     const url = `${this.mediaConfig.filepath}\\${filename}`;
+    this._data.openFile(url);
   }
 
 }

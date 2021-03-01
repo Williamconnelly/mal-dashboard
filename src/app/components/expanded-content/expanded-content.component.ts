@@ -129,6 +129,11 @@ export class ExpandedContentComponent implements OnInit, AfterViewInit, OnDestro
     this.isTransitioning = false;
   };
 
+  public playVideo(filename: string): void {
+    const url = `${this.mediaConfig.filepath}\\${filename}`;
+    this._data.openFile(url);
+  }
+
   ngOnDestroy() {
     this._destroy$.next(null);
   };

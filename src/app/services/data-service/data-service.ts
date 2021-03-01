@@ -245,5 +245,26 @@ export class DataService {
     return +(userScore - meanScore).toFixed(2);
   };
 
+  public openFile(path: string): void {
+    // shell.openExternal(path).then(
+    //   res => {
+    //     console.log(res);
+    //   }
+    // ).catch(
+    //   err => {
+    //     console.error(err);
+    //   }
+    // )
+    this._ipc.renderer.invoke('open-file', path).then(
+      res => {
+        console.log('Opened file', res);
+      }
+    ).catch(
+      err => {
+        console.error('Failed to open file', err);
+      }
+    )
+  }
+
 }
 

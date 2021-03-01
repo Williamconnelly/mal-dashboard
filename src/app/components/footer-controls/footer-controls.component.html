@@ -16,4 +16,11 @@
     <p>Filter types: Type, Genre, Status, Score, Studio.</p>
     <i>Example - type:tv, studio:toei_animation,trigger, score:8</i>
   </div>
+  <div class="episode-toggle">
+    <label class="switch">
+      <input type="checkbox" id="togBtn" (change)="toggleEpisodeFilter($event.target.checked)">
+      <div class="slider round"></div>
+    </label>
+    <span>Has Episodes</span>
+  </div>
 </div>
