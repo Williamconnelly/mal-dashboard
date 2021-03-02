@@ -46,7 +46,7 @@ tr:not(:first-child):hover td:first-child:not(.expanding-row) {
 }
 
 .expanding-row {
-  padding-left: 0 !important;
+  padding: 0 !important;
 }
 
 .expanding-row:hover {
