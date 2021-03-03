@@ -1,6 +1,5 @@
 import { Injectable, Inject, EventEmitter } from '@angular/core';
-import { Theme, ACTIVE_THEME, THEMES } from '../types/themes';
-import { ReplaySubject } from 'rxjs';
+import { Theme, ACTIVE_THEME, THEMES } from '../../types/themes';
 
 @Injectable()
 export class ThemeService {

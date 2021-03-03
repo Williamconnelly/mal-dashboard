@@ -15,6 +15,8 @@ import { StatsComponent } from './components/stats/stats.component';
 import { ExploreComponent } from './components/explore/explore.component';
 import { SakugaComponent } from './components/sakuga/sakuga.component';
 import { MediaViewComponent } from './components/media-view/media-view.component';
+import { ThemeModule } from './services/theme-service/themes.module';
+import { malTheme } from './types/themes';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,11 @@ import { MediaViewComponent } from './components/media-view/media-view.component
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ScrollingModule
+    ScrollingModule,
+    ThemeModule.forRoot({
+      themes: [malTheme],
+      active: 'malTheme'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
