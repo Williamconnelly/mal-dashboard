@@ -17,6 +17,7 @@ import { SakugaComponent } from './components/sakuga/sakuga.component';
 import { MediaViewComponent } from './components/media-view/media-view.component';
 import { ThemeModule } from './services/theme-service/themes.module';
 import { malTheme } from './types/themes';
+import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { malTheme } from './types/themes';
     StatsComponent,
     ExploreComponent,
     SakugaComponent,
-    MediaViewComponent
+    MediaViewComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

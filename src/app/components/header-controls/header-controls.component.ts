@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
+import { IPCService } from 'src/app/services/ipc.service';
 
 @Component({
   selector: 'app-header-controls',
@@ -17,7 +18,7 @@ export class HeaderControlsComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject<boolean>();
 
-  constructor(private _data: DataService, private _router: Router) {
+  constructor(private _data: DataService, private _router: Router, private _ipc: IPCService) {
     this.searchString$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -43,6 +44,24 @@ export class HeaderControlsComponent implements OnInit, OnDestroy {
 
   public routeTo(route: string): void {
     this._router.navigate([route]);
+  }
+
+  public openSettings(): void {
+    this._ipc.renderer.send('open-settings');
+    // const BrowserWindow = remote.BrowserWindow;
+
+    // Create a browser window
+    // var win = new BrowserWindow({
+    //   width: 800,
+    //   height: 600,
+    //   center: true,
+    //   resizable: false,
+    //   frame: true,
+    //   transparent: false
+    // });
+    // // Load the page + route
+    // win.loadURL('file://' + __dirname + '/index.html#/settings');
+
   }
 
 }

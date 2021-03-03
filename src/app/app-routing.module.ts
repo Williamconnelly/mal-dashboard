@@ -6,6 +6,7 @@ import { ExploreComponent } from './components/explore/explore.component';
 import { ListComponent } from './components/list/list.component';
 import { SakugaComponent } from './components/sakuga/sakuga.component';
 import { StatsComponent } from './components/stats/stats.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' },
@@ -13,11 +14,12 @@ const routes: Routes = [
   { path: 'explore', component: ExploreComponent },
   { path: 'sakuga', component: SakugaComponent },
   { path: 'list', component: ListComponent },
-  { path: 'list/:id', component: MediaViewComponent }
+  { path: 'list/:id', component: MediaViewComponent },
+  { path: 'settings', component: SettingsComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {useHash: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
