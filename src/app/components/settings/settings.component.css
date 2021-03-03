@@ -1,0 +1,47 @@
+.settings-wrapper {
+  padding: 1rem;
+}
+
+.custom-theme-container {
+  padding: 1rem 1rem 1rem 0px;
+}
+
+.label {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  text-align: right;
+  width: 225px;
+  line-height: 26px;
+  margin-bottom: 10px;
+}
+
+input {
+  height: 20px;
+  flex: 0 0 100px;
+  margin-left: 10px;
+  outline: none;
+}
+
+input[type="color"] {
+	-webkit-appearance: none;
+	border: 1px solid #000000;
+  width: 32px;
+  height: 26px;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+}
+
+input[type="color"]:hover {
+  cursor: pointer;
+}
+
+input[type="text"] {
+  height: 26px;
+}

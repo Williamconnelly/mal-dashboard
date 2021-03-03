@@ -1,1 +1,42 @@
-<p>settings works!</p>
+<div class="settings-wrapper">
+  <p>Theme</p>
+  <ng-container *ngIf="availableThemes$ | async as themes">
+    <select>
+      <option *ngFor="let theme of themes">{{theme.name}}</option>
+    </select>
+  </ng-container>
+  <button (click)="createTheme()">Create New Theme</button>
+  <ng-container *ngIf="customTheme">
+    <div class="custom-theme-container">
+      <div class="label">
+        Name <input type="text" [value]="customTheme.name" (change)="updateName($event.target.value)">
+      </div>
+      <div class="label">
+        Background <input type="color" [value]="customTheme.properties['--background']" (input)="updateColor($event.target.value, '--background')">
+      </div>
+      <div class="label">
+        Background Text<input type="color" [value]="customTheme.properties['--background-text']" (input)="updateColor($event.target.value, '--background-text')">
+      </div>
+      <div class="label">
+        Primary <input type="color" [value]="customTheme.properties['--primary']" (input)="updateColor($event.target.value, '--primary')">
+      </div>
+      <div class="label">
+        Primary Text<input type="color" [value]="customTheme.properties['--primary-text']" (input)="updateColor($event.target.value, '--primary-text')">
+      </div>
+      <div class="label">
+        Secondary <input type="color" [value]="customTheme.properties['--secondary']" (input)="updateColor($event.target.value, '--secondary')">
+      </div>
+      <div class="label">
+        Secondary Text<input type="color" [value]="customTheme.properties['--secondary-text']" (input)="updateColor($event.target.value, '--secondary-text')">
+      </div>
+      <div class="label">
+        Surface <input type="color" [value]="customTheme.properties['--surface']" (input)="updateColor($event.target.value, '--surface')">
+      </div>
+      <div class="label">
+        Surface Text<input type="color" [value]="customTheme.properties['--surface-text']" (input)="updateColor($event.target.value, '--surface-text')">
+      </div>
+    </div>
+    <button (click)="cancelTheme()">Cancel</button>
+    <button (click)="saveTheme()">Save Theme</button>
+  </ng-container>
+</div>

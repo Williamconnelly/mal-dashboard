@@ -11,12 +11,16 @@ export class ThemeService {
     @Inject(ACTIVE_THEME) public theme: string
   ) { }
 
-  getTheme(name: string) {
+  public getTheme(name: string): Theme {
     const theme = this.themes.find(t => t.name === name);
     if (!theme) {
       throw new Error(`Theme not found: '${name}'`);
     }
     return theme;
+  }
+
+  public getAllThemes(): Theme[] {
+    return this.themes;
   }
 
   public getActiveTheme() {
