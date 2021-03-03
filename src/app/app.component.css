@@ -2,4 +2,5 @@
   font-family: 'Titillium Web', sans-serif;
   height: 100vh;
   overflow: hidden;
+  background-color: var(--background);
 }

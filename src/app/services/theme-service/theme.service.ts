@@ -24,7 +24,7 @@ export class ThemeService {
   }
 
   public getActiveTheme() {
-    return this.getTheme(this.theme);
+    return JSON.parse(JSON.stringify(this.getTheme(this.theme)));
   }
 
   public getProperty(propName: string) {
@@ -50,6 +50,10 @@ export class ThemeService {
     if (name === this.theme) {
       this.themeChange.emit(theme);
     }
+  }
+
+  public updateCustomTheme(theme: Theme): void {
+    this.themeChange.emit(theme);
   }
 
 }

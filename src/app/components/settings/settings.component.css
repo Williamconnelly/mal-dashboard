@@ -45,3 +45,10 @@ input[type="color"]:hover {
 input[type="text"] {
   height: 26px;
 }
+
+.name-error p {
+  margin: 0 0 10px 0;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #8b0000
+}

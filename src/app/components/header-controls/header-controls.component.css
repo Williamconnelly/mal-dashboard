@@ -28,6 +28,7 @@
   height: 100%;
   box-sizing: border-box;
   outline: none;
+  color: var(--secondary-text);
 }
 
 .active {

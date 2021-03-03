@@ -11,6 +11,9 @@
       <div class="label">
         Name <input type="text" [value]="customTheme.name" (change)="updateName($event.target.value)">
       </div>
+      <div *ngIf="themeError$ | async as error" class="name-error">
+        <p>*{{error}}</p>
+      </div>
       <div class="label">
         Background <input type="color" [value]="customTheme.properties['--background']" (input)="updateColor($event.target.value, '--background')">
       </div>
