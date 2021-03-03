@@ -35,14 +35,14 @@ export const devTheme: Theme = {
 export const malTheme: Theme = {
   name: 'malTheme',
   properties: {
-    '--background': '#f8f7ff',
-    '--background-text': '#000',
+    '--background': '#ffffff',
+    '--background-text': '#000000',
     '--primary': '#2e51a2',
-    '--primary-text': '#fff',
-    '--secondary': '#4065ba',
-    '--secondary-text': '#fff',
+    '--primary-text': '#ffffff',
+    '--secondary': '#e1e7f5',
+    '--secondary-text': '#000000',
     '--surface': '#ffffff',
-    '--surface-text': '#black'
+    '--surface-text': '#000000'
   }
 }
 

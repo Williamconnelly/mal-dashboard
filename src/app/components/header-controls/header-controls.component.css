@@ -1,10 +1,10 @@
 .controls-wrapper {
   height: 4rem;
   width: 100%;
-  background-color: #e1e7f5;
+  background-color: var(--secondary);
   border-width: 1px 0px;
   border-style: ridge;
-  border-color: #909090;
+  border-color: var(--secondary-text);
   padding: 0.3rem 2rem;
   box-sizing: border-box;
   display: flex;
@@ -13,11 +13,11 @@
 .searchbar {
   margin-top: 0.3rem;
   width: 25rem;
-  border: 1px solid #4065ba;
+  border: 1px solid var(--primary);
   padding: 10px;
   height: 42px;
-  outline-color: #4065ba;
-  color: black;
+  outline-color: var(--primary);
+  color: var(--background-text);
   font-size: 1.1rem;
   border-radius: 4px;
 }
@@ -31,7 +31,7 @@
 }
 
 .active {
-  color: #486ffd;
+  color: var(--primary);
 }
 
 .header-button p {
@@ -56,7 +56,7 @@
 }
 
 .header-icon {
-  color: #bdbdbd;
+  color: var(--secondary-text);
   font-size: 2rem;
 }
 
@@ -80,7 +80,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ffffff;
+  background-color: var(--background);
   -webkit-transition: .4s;
   transition: .4s;
   border-radius: 34px;
@@ -93,17 +93,17 @@
   width: 32px;
   left: 4px;
   bottom: 4px;
-  background-color: #486ffd;
+  background-color: var(--primary);
   transition: .4s;
   border-radius: 50%;
 }
 
 input:checked + .slider {
-  background-color: #ffffff;
+  background-color: var(--background);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  /* box-shadow: 0 0 1px #2196F3; */
 }
 
 input:checked + .slider:before {
@@ -112,7 +112,7 @@ input:checked + .slider:before {
 
 .slider:after {
  content:'ANIME';
- color: black;
+ color: var(--background-text);
  display: block;
  position: absolute;
  transform: translate(-50%,-50%);

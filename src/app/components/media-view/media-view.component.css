@@ -8,7 +8,7 @@
 }
 
 .back-button {
-  color: #4065ba;
+  color: var(--primary);
   padding: 0.5rem;
   display: inline-block;
   margin-left: auto;
@@ -44,7 +44,7 @@
 }
 
 .positive {
-  color: #4065ba;
+  color: var(--primary);
 }
 
 .negative {
@@ -79,7 +79,7 @@
   height: 438px;
   width: 310px;
   display: inline-block;
-  border: 1px solid #4065ba;
+  border: 1px solid var(--primary);
 }
 
 .details-container {
@@ -94,14 +94,14 @@
   height: 570px;
   box-sizing: border-box;
   flex: 1;
-  border: 1px solid black;
+  border: 1px solid var(--background-text);
   overflow-y: auto;
   font-size: 1.1rem;
   margin: 1rem 1rem 1rem 0px;
 }
 
 .episode-container div {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--background-text);
   padding-left: 0.3rem;
 }
 
@@ -110,17 +110,17 @@
 }
 
 .episode-container div:hover .episode-icon {
-  color: #fff;
+  color: var(--background);
 }
 
 .episode-icon {
   font-size: 1rem;
-  color: #4065ba
+  color: var(--primary)
 }
 
 .no-data {
   text-align: center;
-  color: #e1e7f5;
+  color: var(--secondary);
   position: relative;
   display: flex;
   align-items: center;
@@ -144,7 +144,7 @@
 }
 
 .episode-row:hover {
-  background-color: #4065ba;
-  color: #fff;
+  background-color: var(--primary);
+  color: var(--primary-text);
   cursor: pointer;
 }

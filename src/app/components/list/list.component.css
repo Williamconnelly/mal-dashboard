@@ -19,7 +19,7 @@ th, td:not(.expanding-row) {
 }
 
 th {
-  border-bottom: 1px solid #4065ba;
+  border-bottom: 1px solid var(--primary);
 }
 
 tr:not(:first-child):not(.expanding-row-container) {
@@ -29,8 +29,8 @@ tr:not(:first-child):not(.expanding-row-container) {
 }
 
 tr:not(:first-child):hover {
-  background-color: #4065ba;
-  color: #fff;
+  background-color: var(--primary);
+  color: var(--primary-text);
 }
 
 tr:not(:first-child):hover .preview-image {
@@ -51,8 +51,8 @@ tr:not(:first-child):hover td:first-child:not(.expanding-row) {
 
 .expanding-row:hover {
   /* background-color: #f8f7ff; */
-  background-color: white;
-  color: black;
+  background-color: var(--background);
+  color: var(--background-text);
 }
 
 .table-image {
@@ -78,7 +78,7 @@ tr:not(:first-child):hover td:first-child:not(.expanding-row) {
 
 .no-data {
   text-align: center;
-  color: #e1e7f5;
+  color: var(--secondary);
 }
 
 .no-data-icon {
@@ -91,6 +91,6 @@ tr:not(:first-child):hover td:first-child:not(.expanding-row) {
 }
 
 .edit-icon:hover {
-  color: #4065ba;
+  color: var(--primary);
   cursor: pointer;
 }

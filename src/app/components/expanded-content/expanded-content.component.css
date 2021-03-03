@@ -21,7 +21,7 @@
   top: 0;
   width: 100%;
   z-index: 0;
-  border: 1px solid #4065ba;
+  border: 1px solid var(--primary);
   border-radius: 3px;
 }
 
@@ -55,7 +55,7 @@
   box-sizing: border-box;
   flex: 1;
   margin-left: 1rem;
-  border: 1px solid black;
+  border: 1px solid var(--background-text);
   overflow-y: auto;
   font-size: 1.1rem;
 }
@@ -67,13 +67,13 @@
 }
 
 .episode-row:hover {
-  background-color: #4065ba;
-  color: #fff;
+  background-color: var(--primary);
+  color: var(--primary-text);
   cursor: pointer;
 }
 
 .episode-box div {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--background-text);
   padding-left: 0.3rem;
 }
 
@@ -82,17 +82,17 @@
 }
 
 .episode-box div:hover .episode-icon {
-  color: #fff;
+  color: var(--primary-text);
 }
 
 .episode-icon {
   font-size: 1rem;
-  color: #4065ba
+  color: var(--primary);
 }
 
 .no-data {
   text-align: center;
-  color: #e1e7f5;
+  color: var(--secondary);
   position: relative;
   display: flex;
   align-items: center;

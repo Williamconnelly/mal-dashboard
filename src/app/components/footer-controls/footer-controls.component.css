@@ -1,10 +1,11 @@
 .controls-wrapper {
   height: 3rem;
   width: 100%;
-  background-color: #e1e7f5;
+  background-color: var(--secondary);
   border-width: 1px 0px;
   border-style: ridge;
-  border-color: #909090;
+  /* border-color: #909090; */
+  border-color: var(--secondary-text);
   padding: 0.3rem 2rem;
   box-sizing: border-box;
   display: flex;
@@ -15,11 +16,11 @@
 .searchbar {
   margin-top: 0.25rem;
   width: 8rem;
-  border: 1px solid #4065ba;
+  border: 1px solid var(--primary);
   padding: 3px 3px 3px 26px;
   height: 26px;
-  outline-color: #4065ba;
-  color: black;
+  outline-color: var(--primary);
+  color: var(--background-text);
   font-size: 0.8rem;
   border-radius: 4px;
   transition: all cubic-bezier(0.3, 0.7, 0.9, 1) 0.2s;
@@ -36,7 +37,7 @@
 
 .search-icon {
   position: absolute;
-  color: #4065ba;
+  color: var(--primary);
   font-size: 0.8rem;
   top: 10px;
   left: 6px;
@@ -50,7 +51,7 @@
 
 .tooltip-icon {
   font-size: 1rem;
-  color: #4065ba;
+  color: var(--primary);
   margin: 0.5rem 0px 0px 0.5rem;
   box-sizing: border-box;
 }
@@ -95,7 +96,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ffffff;
+  background-color: var(--background);
   -webkit-transition: .4s;
   transition: .4s;
   border-radius: 34px;
@@ -108,17 +109,17 @@
   width: 20px;
   left: 2px;
   bottom: 1px;
-  background-color: #486ffd;
+  background-color: var(--primary);
   transition: .2s;
   border-radius: 50%;
 }
 
 input:checked + .slider {
-  background-color: #ffffff;
+  background-color: var(--background);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  /* box-shadow: 0 0 1px #2196F3; */
 }
 
 input:checked + .slider:before {
@@ -126,7 +127,7 @@ input:checked + .slider:before {
 }
 
 .slider:after {
- color: black;
+ color: var(--background-text);
  display: block;
  position: absolute;
  transform: translate(-50%,-50%);

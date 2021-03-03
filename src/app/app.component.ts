@@ -10,8 +10,8 @@ export class AppComponent {
 
   title = 'electron-angular-demo';
 
-  constructor(private _theme: ThemeService) {
-    console.log(this._theme.getActiveTheme());
+  constructor() {
+
   }
 
   // public sanitizeImageUrl(imageUrl: string): SafeUrl {
