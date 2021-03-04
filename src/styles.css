@@ -29,3 +29,27 @@ html {
 *, *:before, *:after {
   box-sizing: inherit;
 }
+
+.button {
+  display: inline-block;
+  border: 1px solid var(--background-text);
+  padding: 0.3rem 0.5rem 0.3rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  background-color: var(--background);
+  color: var(--primary);
+}
+
+.button span {
+  margin-right: 0.5rem;
+}
+
+.button:hover {
+  cursor: pointer;
+  background-color: var(--primary);
+  color: var(--primary-text);
+}
+
+.button .button-icon {
+  font-size: 0.8rem;
+}

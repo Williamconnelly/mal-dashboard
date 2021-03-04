@@ -56,5 +56,10 @@ export class ThemeService {
     this.themeChange.emit(theme);
   }
 
+  public addTheme(theme: Theme): void {
+    this.themes.push(theme);
+    this.setTheme(theme.name);
+  }
+
 }
 

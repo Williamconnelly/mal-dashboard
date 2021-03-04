@@ -1,0 +1,6 @@
+<div *ngIf="options && options.length" class="select-container" [ngStyle]="{'width': width}">
+  <p #Selection class="selection" (click)="toggleDropdown()">{{selection}}</p>
+  <div #DropdownContent class="dropdown-content">
+    <p *ngFor="let option of options" class="option" (click)="selectOption(option)">{{option}}</p>
+  </div>
+</div>

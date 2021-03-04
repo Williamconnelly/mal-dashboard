@@ -33,6 +33,7 @@
   width: 100%;
   padding: 1rem;
   overflow-y: auto;
+  color: var(--background-text);
 }
 
 .details-container {

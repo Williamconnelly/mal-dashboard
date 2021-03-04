@@ -23,8 +23,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   public themeError$ = new BehaviorSubject<string>('');
 
+  public themeOptions: string[];
+
   constructor(private _theme: ThemeService) { 
-    this.availableThemes$.next(this._theme.getAllThemes());
+    this.setAvailableThemes();
     this.currentActiveTheme = this._theme.getActiveTheme();
     this.themeChange$.pipe(
       debounceTime(100),
@@ -33,7 +35,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       theme => {
         this._theme.updateCustomTheme(theme);
       }
-    )
+    );
   }
 
   ngOnInit() {
@@ -63,7 +65,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       this.themeError$.next('Theme name cannot contain spaces');
       return;
     }
-    if (this.availableThemes$.value.map(theme => theme.name).includes(name)) {
+    if (this.availableThemes$.value.map(theme => theme.name.toLowerCase()).includes(name.toLowerCase())) {
       this.themeError$.next('Theme name already exists');
       return;
     }
@@ -73,11 +75,24 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   public cancelTheme() {
     this.customTheme = null;
+    this._theme.setTheme(this.currentActiveTheme.name);
   }
 
   ngOnDestroy() {
     this._destroy$.next();
     this._destroy$.complete();
+  }
+
+  public themeSelected(themeName: string): void {
+    console.log('Selected', themeName);
+    this.customTheme = null;
+    this._theme.setTheme(themeName);
+    this.currentActiveTheme = this._theme.getActiveTheme();
+  }
+
+  private setAvailableThemes(): void {
+    this.availableThemes$.next(this._theme.getAllThemes());
+    this.themeOptions = this.availableThemes$.value.map(theme => theme.name);
   }
 
 }

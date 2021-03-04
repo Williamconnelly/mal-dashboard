@@ -16,8 +16,9 @@ import { ExploreComponent } from './components/explore/explore.component';
 import { SakugaComponent } from './components/sakuga/sakuga.component';
 import { MediaViewComponent } from './components/media-view/media-view.component';
 import { ThemeModule } from './services/theme-service/themes.module';
-import { malTheme } from './types/themes';
+import { malTheme, devTheme } from './types/themes';
 import { SettingsComponent } from './components/settings/settings.component';
+import { DropdownComponent } from './components/dropdown/dropdown.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { SettingsComponent } from './components/settings/settings.component';
     ExploreComponent,
     SakugaComponent,
     MediaViewComponent,
-    SettingsComponent
+    SettingsComponent,
+    DropdownComponent
   ],
   imports: [
     BrowserModule,
@@ -41,8 +43,8 @@ import { SettingsComponent } from './components/settings/settings.component';
     FormsModule,
     ScrollingModule,
     ThemeModule.forRoot({
-      themes: [malTheme],
-      active: 'malTheme'
+      themes: [malTheme, devTheme],
+      active: 'MyAnimeList'
     })
   ],
   providers: [],

@@ -19,7 +19,7 @@ export interface Theme {
 };
 
 export const devTheme: Theme = {
-  name: 'devTheme',
+  name: 'Developer',
   properties: {
     '--background': '#070720',
     '--background-text': '#fff',
@@ -33,7 +33,7 @@ export const devTheme: Theme = {
 }
 
 export const malTheme: Theme = {
-  name: 'malTheme',
+  name: 'MyAnimeList',
   properties: {
     '--background': '#ffffff',
     '--background-text': '#000000',

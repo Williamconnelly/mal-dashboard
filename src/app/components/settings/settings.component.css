@@ -1,9 +1,17 @@
 .settings-wrapper {
   padding: 1rem;
+  overflow-y: auto;
+  width: 100%;
+  height: calc(100% - 4rem - 3rem);
+  color: var(--background-text);
 }
 
 .custom-theme-container {
-  padding: 1rem 1rem 1rem 0px;
+  padding: 1rem 1rem 1rem 1rem;
+  background-color: #ffffff;
+  color: #000000;
+  margin: 0.5rem 0;
+  border-radius: 4px;
 }
 
 .label {
@@ -51,4 +59,19 @@ input[type="text"] {
   font-size: 0.8rem;
   font-style: italic;
   color: #8b0000
+}
+
+.settings-container {
+  width: fit-content;
+}
+
+.settings-header {
+  margin: 0 0 1rem 0;
+  font-size: 2rem;
+}
+
+.theme-header, .theme-footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }

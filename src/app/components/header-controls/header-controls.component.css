@@ -17,7 +17,7 @@
   padding: 10px;
   height: 42px;
   outline-color: var(--primary);
-  color: var(--background-text);
+  color: #000000;
   font-size: 1.1rem;
   border-radius: 4px;
 }

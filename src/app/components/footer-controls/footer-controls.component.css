@@ -20,7 +20,7 @@
   padding: 3px 3px 3px 26px;
   height: 26px;
   outline-color: var(--primary);
-  color: var(--background-text);
+  color: #000000;
   font-size: 0.8rem;
   border-radius: 4px;
   transition: all cubic-bezier(0.3, 0.7, 0.9, 1) 0.2s;

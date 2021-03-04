@@ -1,0 +1,44 @@
+:host {
+  display: inline-block;
+  color: var(--background-text);
+}
+
+.select-container {
+  position: relative;
+  outline: 1px solid var(--background-text);
+  outline-offset: -1px;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  width: 100%;
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  z-index: 2;
+  box-sizing: border-box;
+  border: 1px solid var(--secondary);
+  overflow-y: auto;
+  max-height: 228px;
+  color: #000000;
+}
+
+.select-container p {
+  margin: 0;
+}
+
+.selected:hover {
+  cursor: pointer;
+}
+
+.option:hover {
+  cursor: pointer;
+  background-color: var(--primary);
+  color: var(--primary-text);
+}
+
+.selection, .option {
+  padding: 0.3rem 0.5rem;
+  width: 100%;
+}
+
