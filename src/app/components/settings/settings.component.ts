@@ -15,7 +15,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   public customTheme: Theme;
 
-  private currentActiveTheme: Theme;
+  public currentActiveTheme: Theme;
 
   private themeChange$ = new Subject<Theme>();
 
@@ -55,9 +55,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public saveTheme(): void {
     if (!this.customTheme.name) {
       this.themeError$.next('Custom Theme requires a name');
+      return;
     }
-    console.log(this.customTheme.properties);
-    this._theme.updateCustomTheme(this.customTheme);
+    this._theme.addTheme(this.customTheme);
+    this.customTheme = null;
+    this.setAvailableThemes();
+    this.currentActiveTheme = this._theme.getActiveTheme();
   }
 
   public updateName(name: string) {
@@ -84,7 +87,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   public themeSelected(themeName: string): void {
-    console.log('Selected', themeName);
     this.customTheme = null;
     this._theme.setTheme(themeName);
     this.currentActiveTheme = this._theme.getActiveTheme();

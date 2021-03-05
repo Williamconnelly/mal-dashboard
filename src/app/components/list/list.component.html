@@ -4,8 +4,8 @@
       <cdk-virtual-scroll-viewport [itemSize]="rowSize" class="scroll-viewport" (scrolledIndexChange)="nextBatch($event, (nodes[nodes.length - 1].id))" appViewportResize>
         <table>
           <tr class="table-header-row">
-            <th style="width: 10%;">Image</th>
-            <th style="width: 50%;">Title</th>
+            <th style="width: 5;">Image</th>
+            <th style="width: 55%;">Title</th>
             <th style="width: 10%;">Score</th>
             <th style="width: 10%;">Type</th>
             <th style="width: 10%;">Status</th>
@@ -14,10 +14,10 @@
           <ng-container *cdkVirtualFor="let media of nodes; let i = index; templateCacheSize: 0">
             <tr (click)="toggleExpandedContent(media.id)" class="table-body-row">
               <ng-container *ngIf="media">
-                <td style="width: 10%;">
+                <td style="width: 5%;">
                   <div class="table-image" [ngStyle]="{'background-image':'url(' + media.main_picture.medium + ')'}"></div>
                 </td>
-                <td style="width: 50%;">{{media.title}}</td>
+                <td style="width: 55%;">{{media.title}}</td>
                 <td style="width: 10%;">{{media.my_list_status.score || '--'}}</td>
                 <td style="width: 10%;">{{media.media_type | uppercase}}</td>
                 <td style="width: 10%;">{{media.my_list_status.status | titlecase}}</td>
@@ -28,8 +28,8 @@
                 </td>
               </ng-container>
               <ng-container *ngIf="!media">
-                <td style="width: 10%;">Loading...</td>
-                <td style="width: 50%;">Loading...</td>
+                <td style="width: 5%;">Loading...</td>
+                <td style="width: 55%;">Loading...</td>
                 <td style="width: 10%;">Loading...</td>
                 <td style="width: 10%;">Loading...</td>
                 <td style="width: 10%;">Loading...</td>

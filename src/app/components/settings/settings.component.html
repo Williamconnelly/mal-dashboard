@@ -3,7 +3,12 @@
   <div class="settings-container">
     <div class="theme-header">
       <ng-container *ngIf="availableThemes$ | async as themes">
-        <dropdown [options]="themeOptions" (selectionChange)="themeSelected($event)" style="margin-right: 1rem;"></dropdown>
+        <dropdown 
+          [options]="themeOptions" 
+          [selection]="currentActiveTheme.name"
+          (selectionChange)="themeSelected($event)" 
+          style="margin-right: 1rem;">
+        </dropdown>
       </ng-container>
       <div *ngIf="!customTheme" class="button" (click)="createTheme()" style="vertical-align: top;">
         <span>Add Theme</span>
