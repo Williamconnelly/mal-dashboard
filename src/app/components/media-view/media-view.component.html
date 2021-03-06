@@ -23,20 +23,29 @@
     </div>
     <div class="media-view">
       <div class="view-header">
-        <p><span class="label">Score: </span>{{media.my_list_status.score || '--'}} 
-          <span *ngIf="media.my_list_status.score">(
-            <span [ngClass]="scoreDifferential > 0 ? 'positive' : 'negative'">{{scoreDifferential > 0 ? ' + ' : ''}}{{scoreDifferential}} </span>
-          )</span>
-        </p>
-        <p><span class="label">Status: </span>{{media.my_list_status.status | titlecase}}</p>
-        <p><span class="label">Progress: </span>{{media.my_list_status.num_episodes_watched}} / {{media.num_episodes}}</p>
+        <div>
+          <p><span class="label">Score: </span>{{media.my_list_status.score || '--'}} 
+            <span *ngIf="media.my_list_status.score">(
+              <span [ngClass]="scoreDifferential > 0 ? 'positive' : 'negative'">{{scoreDifferential > 0 ? ' + ' : ''}}{{scoreDifferential}} </span>
+            )</span>
+          </p>
+          <p><span class="label">Status: </span>{{media.my_list_status.status | titlecase}}</p>
+          <p><span class="label">Progress: </span>{{media.my_list_status.num_episodes_watched}} / {{media.num_episodes}}</p>
+        </div>
+        <div>
+          <p><span class="label">Start Date: </span>{{media.my_list_status.start_date ? media.my_list_status.start_date : '--'}}</p>
+        <p><span class="label">Finish Date: </span>{{media.my_list_status.finish_date ? media.my_list_status.finish_date : '--'}}</p>
+        <!-- TEMP -->
+        <p><span>Edit</span></p>
+        <!-- TEMP -->
+        </div>
       </div>
       <div class="view-body">
         <!-- TEMP -->
-        <div>
+        <!-- <div>
           <button (click)="setDirectory()">Set Path</button>
           <button>Create Links</button>
-        </div>
+        </div> -->
         <!-- TEMP -->
         <div class="episode-container">
           <ng-container *ngIf="episodes$ | async as episodes; else NoEpisodes">
@@ -49,7 +58,7 @@
             <div class="no-data">
               <div>
                 <i class="no-data-icon far fa-times-circle"></i>
-                <p>No Episodes</p>
+                <p>{{noEpisodesError$ | async}}</p>
               </div>
             </div>
           </ng-template>

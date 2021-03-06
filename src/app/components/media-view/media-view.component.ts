@@ -24,6 +24,8 @@ export class MediaViewComponent implements OnInit {
 
   public episodes$ = new BehaviorSubject<string[]>(null);
 
+  public noEpisodesError$ = new BehaviorSubject<string>('No Episodes');
+
   @ViewChild('player', {static: false}) videoPlayer: ElementRef<HTMLVideoElement>
 
   constructor(
@@ -92,7 +94,7 @@ export class MediaViewComponent implements OnInit {
         },
         err => {
           console.error('Failed to fetch media files', err);
-          // TODO: Handle error display
+          this.noEpisodesError$.next('Files missing or path changed');
         }
       )
     }

@@ -1,1 +1,11 @@
-<p>sakuga works!</p>
+<div class="sakuga-wrapper" [ngStyle]="{'height': embedded ? '100%' : 'calc(100% - 4rem - 3rem)'}">
+  <div *ngIf="posts$ | async as posts; else NoData" class="sakuga-container">
+    <p>Hello World</p>
+  </div>
+  <ng-template #NoData>
+    <div class="no-data">
+      <i class="no-data-icon far fa-times-circle"></i>
+      <p>No Results Found</p>
+    </div>
+  </ng-template>
+</div>

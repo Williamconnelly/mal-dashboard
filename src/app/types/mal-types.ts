@@ -4,6 +4,8 @@ export interface ListStatus {
   score: number;
   status: string;
   updated_at: string;
+  start_date?: string;
+  finish_date?: string;
 }
 
 export interface UserList {

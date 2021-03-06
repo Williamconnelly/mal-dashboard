@@ -53,3 +53,22 @@ html {
 .button .button-icon {
   font-size: 0.8rem;
 }
+
+.no-data {
+  text-align: center;
+  color: var(--secondary);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.no-data-icon {
+  font-size: 7rem;
+}
+
+.no-data p {
+  margin: 1rem 0 0 0;
+  font-size: 1.3rem;
+}
