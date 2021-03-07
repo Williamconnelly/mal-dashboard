@@ -1,7 +1,7 @@
-<div class="sakuga-wrapper" [ngStyle]="{'height': embedded ? '100%' : 'calc(100% - 4rem - 3rem)'}">
+<div class="sakuga-wrapper" [ngStyle]="{'height': embedded ? 'calc(100% - 4rem)' : 'calc(100% - 4rem - 7rem)'}">
   <div *ngIf="posts$ | async as posts; else NoData" class="sakuga-container">
     <div *ngFor="let post of posts" class="preview transition" [ngStyle]="{'background-image':'url(' + post.preview_url + ')'}">
-      <div class="preview-overlay">
+      <div *ngIf="post.source" class="preview-overlay">
         <p>{{ getSourceDisplay(post.source) }}: {{post.source.includes('http') ? 'Twitter' : post.source}}</p>
       </div>
     </div>
@@ -12,4 +12,14 @@
       <p>No Results Found</p>
     </div>
   </ng-template>
+</div>
+<div *ngIf="posts$ | async" class="page-controls">
+  <div class="button" (click)="previousPage()">
+    <i class="fas fa-arrow-left button-icon" style="margin-right: 0.5rem;"></i>
+    <span>Previous</span>
+  </div>
+  <div class="button" (click)="nextPage()">
+    <span>Next</span>
+    <i class="fas fa-arrow-right button-icon"></i>
+  </div>
 </div>

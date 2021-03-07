@@ -38,13 +38,21 @@ export class SakugaComponent implements OnInit, OnDestroy {
 
   }
 
+  public getSourceDisplay(source: string): string {
+    return (['op','ed','http','pv'].some(src => source.toLowerCase().includes(src))) ? 'Source' : 'Episode';
+  }
+
+  public previousPage(): void {
+
+  }
+
+  public nextPage(): void {
+    
+  }
+
   ngOnDestroy() {
     this._destroy$.next();
     this._destroy$.complete();
-  }
-
-  public getSourceDisplay(source: string): string {
-    return (['op','ed','http'].some(src => source.includes(src))) ? 'Source' : 'Episode';
   }
 
 }

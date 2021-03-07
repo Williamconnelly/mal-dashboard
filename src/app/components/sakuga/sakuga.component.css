@@ -66,3 +66,18 @@
 .preview-overlay p {
   margin: 0;
 }
+
+.page-controls {
+  text-align: center;
+  padding: 0.7rem;
+  border-top: 1px solid var(--background-text);
+}
+
+.page-controls div {
+  margin: 0 3rem;
+}
+
+.page-controls .button {
+  font-size: 0.9rem;
+  padding: 0.5rem 5rem;
+}
