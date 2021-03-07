@@ -19,6 +19,7 @@ export class SakugaService {
   }
 
   public fetchPosts(query: string): void {
+    console.log('FETCHING')
     const q = this.formatQueryString(query);
     const url = `${this.baseUrl}/post.json?limit=100&tags=${q}`;
     // return this._http.get<Post[]>(url);

@@ -96,9 +96,9 @@
 
 .modal-content {
   background-color: #000000;
-  margin: 5% auto;
+  margin: 3rem auto;
   padding: 0 1rem 1rem 1rem;
-  width: 80%;
+  width: 60%;
   border-radius: 7px;
 }
 
@@ -130,4 +130,21 @@
 .modal video {
   outline: none;
   border-radius: 3px;
+}
+
+.tag {
+  background-color: #ffffff;
+  color: #000000;
+  display: inline-block;
+  margin: 1rem;
+  padding: 0.5rem;
+  border-radius: 10px;
+  font-weight: bold;
+  min-width: 14rem;
+  text-align: center;
+}
+
+.tag:hover {
+  cursor: pointer;
+  color: var(--primary);
 }

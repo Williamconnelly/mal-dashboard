@@ -22,6 +22,8 @@ export class SakugaComponent implements OnInit, OnDestroy {
 
   @ViewChild('Modal', {static: false}) modal: ElementRef<HTMLElement>;
 
+  @ViewChild('SakugaContainer', {static: false}) sakugaContainer: ElementRef<HTMLElement>;
+
   constructor(private _sakuga: SakugaService, private _data: DataService) {
     this._sakuga.getPosts().pipe(
       filter(posts => !!posts),
@@ -67,6 +69,17 @@ export class SakugaComponent implements OnInit, OnDestroy {
   public closeModal(): void {
     this.currentPost = null;
     this.modal.nativeElement.style.display = 'none';
+  }
+
+  public getTags(post: Post): string[] {
+    return post.tags.split(' ');
+  }
+
+  public selectTag(tag: string): void {
+    this._data.searchStrings.sakugaSearch.next(tag);
+    this._sakuga.fetchPosts(tag);
+    this.closeModal();
+    this.sakugaContainer.nativeElement.scrollTo(0, 0);
   }
 
 }

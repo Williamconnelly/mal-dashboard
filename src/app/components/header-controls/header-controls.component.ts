@@ -39,15 +39,45 @@ export class HeaderControlsComponent implements OnInit, OnDestroy {
       (nav: NavigationEnd) => {
         // Set Searchbar to cached search string
         if (nav.url === '/list') {
-          this.searchString = this._data.searchStrings.listSearch;
+          this.searchString = this._data.searchStrings.listSearch.value;
         } else if (nav.url === '/sakuga') {
-          this.searchString = this._data.searchStrings.sakugaSearch;
+          this.searchString = this._data.searchStrings.sakugaSearch.value;
         } else if (nav.url === '/explore') {
-          this.searchString = this._data.searchStrings.exploreSearch;
+          this.searchString = this._data.searchStrings.exploreSearch.value;
         }
       },
       err => {
         console.error('Could not get route');
+      }
+    );
+
+    this._data.searchStrings.listSearch.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(
+      search => {
+        if (this._router.url === '/list') {
+          this.searchString = search;
+        }
+      }
+    );
+
+    this._data.searchStrings.sakugaSearch.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(
+      search => {
+        if (this._router.url === '/sakuga') {
+          this.searchString = search;
+        }
+      }
+    );
+
+    this._data.searchStrings.exploreSearch.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(
+      search => {
+        if (this._router.url === '/explore') {
+          this.searchString = search;
+        }
       }
     );
 
@@ -76,34 +106,21 @@ export class HeaderControlsComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    this._destroy$.next(null);
-  };
-
   public routeTo(route: string): void {
     this._router.navigate([route]);
   }
 
-  public openSettings(): void {
-    this._ipc.renderer.send('open-settings');
-    // const BrowserWindow = remote.BrowserWindow;
-
-    // Create a browser window
-    // var win = new BrowserWindow({
-    //   width: 800,
-    //   height: 600,
-    //   center: true,
-    //   resizable: false,
-    //   frame: true,
-    //   transparent: false
-    // });
-    // // Load the page + route
-    // win.loadURL('file://' + __dirname + '/index.html#/settings');
-
-  }
-
   public executeSearch(search: string) {
     this.submitString$.next(search);
+    if (this._router.url === '/sakuga') {
+      this._data.searchStrings.sakugaSearch.next(search);
+    } else if (this._router.url === '/explore') {
+      this._data.searchStrings.exploreSearch.next(search);
+    }
   }
+
+  ngOnDestroy() {
+    this._destroy$.next(null);
+  };
 
 }

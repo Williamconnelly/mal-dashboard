@@ -51,9 +51,9 @@ export class DataService {
   public sakugaQuery: string;
 
   public searchStrings = {
-    listSearch: '',
-    exploreSearch: '',
-    sakugaSearch: ''
+    listSearch: new BehaviorSubject<string>(''),
+    exploreSearch: new BehaviorSubject<string>(''),
+    sakugaSearch: new BehaviorSubject<string>('')
   };
 
   constructor(private _mal: MALService, private _ipc: IPCService) {
@@ -109,7 +109,7 @@ export class DataService {
 
   public filterListByName(filter: string): void {
     this.filterState.name = filter || '';
-    this.searchStrings.listSearch = this.filterState.name;
+    this.searchStrings.listSearch.next(this.filterState.name);
     this.filterList();
   }
 
