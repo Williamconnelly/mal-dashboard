@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
@@ -17,6 +17,10 @@ export class SakugaComponent implements OnInit, OnDestroy {
   public posts$ = new BehaviorSubject<Post[]>(null);
 
   private _destroy$ = new Subject<boolean>();
+
+  public currentPost: Post;
+
+  @ViewChild('Modal', {static: false}) modal: ElementRef<HTMLElement>;
 
   constructor(private _sakuga: SakugaService, private _data: DataService) {
     this._sakuga.getPosts().pipe(
@@ -47,12 +51,22 @@ export class SakugaComponent implements OnInit, OnDestroy {
   }
 
   public nextPage(): void {
-    
+
   }
 
   ngOnDestroy() {
     this._destroy$.next();
     this._destroy$.complete();
+  }
+
+  public openModal(post: Post): void {
+    this.currentPost = post;
+    this.modal.nativeElement.style.display = 'block';
+  }
+
+  public closeModal(): void {
+    this.currentPost = null;
+    this.modal.nativeElement.style.display = 'none';
   }
 
 }

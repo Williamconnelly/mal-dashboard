@@ -1,6 +1,6 @@
 <div class="sakuga-wrapper" [ngStyle]="{'height': embedded ? 'calc(100% - 4rem)' : 'calc(100% - 4rem - 7rem)'}">
   <div *ngIf="posts$ | async as posts; else NoData" class="sakuga-container">
-    <div *ngFor="let post of posts" class="preview transition" [ngStyle]="{'background-image':'url(' + post.preview_url + ')'}">
+    <div *ngFor="let post of posts" class="preview transition" [ngStyle]="{'background-image':'url(' + post.preview_url + ')'}" (click)="openModal(post)">
       <div *ngIf="post.source" class="preview-overlay">
         <p>{{ getSourceDisplay(post.source) }}: {{post.source.includes('http') ? 'Twitter' : post.source}}</p>
       </div>
@@ -23,3 +23,19 @@
     <i class="fas fa-arrow-right button-icon"></i>
   </div>
 </div>
+
+<div #Modal class="modal">
+  <div *ngIf="currentPost" class="modal-content">
+    <div class="modal-header">
+      <span>{{ getSourceDisplay(currentPost.source) }}: {{currentPost.source.includes('http') ? 'Twitter' : currentPost.source}}</span>
+      <div (click)="closeModal()" class="modal-button">
+        <i class="fas fa-times"></i>
+      </div>
+    </div>
+    <video width="100%" autoplay controls>
+      <source src="{{currentPost.file_url}}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</div>
+
