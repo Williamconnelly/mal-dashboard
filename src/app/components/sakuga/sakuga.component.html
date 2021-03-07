@@ -1,6 +1,10 @@
 <div class="sakuga-wrapper" [ngStyle]="{'height': embedded ? '100%' : 'calc(100% - 4rem - 3rem)'}">
   <div *ngIf="posts$ | async as posts; else NoData" class="sakuga-container">
-    <p>Hello World</p>
+    <div *ngFor="let post of posts" class="preview transition" [ngStyle]="{'background-image':'url(' + post.preview_url + ')'}">
+      <div class="preview-overlay">
+        <p>{{ getSourceDisplay(post.source) }}: {{post.source.includes('http') ? 'Twitter' : post.source}}</p>
+      </div>
+    </div>
   </div>
   <ng-template #NoData>
     <div class="no-data">

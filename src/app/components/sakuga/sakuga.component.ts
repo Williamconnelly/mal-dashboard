@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { filter, take, takeUntil } from 'rxjs/operators';
+import { DataService } from 'src/app/services/data-service/data-service';
 import { SakugaService } from 'src/app/services/sakuga.service';
 import { Post } from 'src/app/types/sakuga-types';
 
@@ -9,27 +10,41 @@ import { Post } from 'src/app/types/sakuga-types';
   templateUrl: './sakuga.component.html',
   styleUrls: ['./sakuga.component.css']
 })
-export class SakugaComponent implements OnInit {
+export class SakugaComponent implements OnInit, OnDestroy {
 
   @Input() embedded = false;
 
   public posts$ = new BehaviorSubject<Post[]>(null);
 
-  constructor(private _sakuga: SakugaService) { 
-    this._sakuga.getPosts('black_clover -production_materials source:*63*').pipe(
-      take(1)
+  private _destroy$ = new Subject<boolean>();
+
+  constructor(private _sakuga: SakugaService, private _data: DataService) {
+    this._sakuga.getPosts().pipe(
+      filter(posts => !!posts),
+      takeUntil(this._destroy$)
     ).subscribe(
-      res => {
-        console.log(res);
-        this.posts$.next(res);
-      }, err => {
-        console.error(err);
+      posts => {
+        console.log('Got Sakuga', posts);
+        this.posts$.next(posts);
+      },
+      err => {
+        console.error('Failed to fetch Sakuga', err);
       }
     )
+
   }
 
   ngOnInit() {
 
+  }
+
+  ngOnDestroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
+  }
+
+  public getSourceDisplay(source: string): string {
+    return (['op','ed','http'].some(src => source.includes(src))) ? 'Source' : 'Episode';
   }
 
 }

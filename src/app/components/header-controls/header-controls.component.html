@@ -6,6 +6,7 @@
       [(ngModel)]="searchString" 
       (ngModelChange)="searchFieldChanged($event)"
       spellcheck="false"
+      (keydown.enter)="executeSearch($event.target.value)"
     >
   </div>
   <div class="header-button" [routerLink]="['/stats']" [routerLinkActive]="['active']">

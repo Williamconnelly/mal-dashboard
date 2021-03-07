@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { MediaConfig, MediaConfigMap } from 'src/app/types/media-types';
+import { Post } from 'src/app/types/sakuga-types';
 import { ListNode, UserList } from '../../types/mal-types';
 import { IPCService } from '../ipc.service';
 import { MALService } from '../mal.service';
+import { SakugaService } from '../sakuga.service';
 
 class ListFilter {
   public parameter: string;
@@ -45,6 +47,14 @@ export class DataService {
     queryFilters: [],
     hasEpisodes: false
   }
+
+  public sakugaQuery: string;
+
+  public searchStrings = {
+    listSearch: '',
+    exploreSearch: '',
+    sakugaSearch: ''
+  };
 
   constructor(private _mal: MALService, private _ipc: IPCService) {
     this._mal.getListData().pipe(
@@ -99,6 +109,7 @@ export class DataService {
 
   public filterListByName(filter: string): void {
     this.filterState.name = filter || '';
+    this.searchStrings.listSearch = this.filterState.name;
     this.filterList();
   }
 
