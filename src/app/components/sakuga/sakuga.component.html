@@ -1,6 +1,6 @@
 <div class="sakuga-wrapper" [ngStyle]="{'height': embedded ? 'calc(100% - 4rem)' : 'calc(100% - 4rem - 7rem)'}">
   <div #SakugaContainer *ngIf="posts$ | async as posts; else NoData" class="sakuga-container">
-    <div *ngFor="let post of posts" class="preview transition" [ngStyle]="{'background-image':'url(' + post.preview_url + ')'}" (click)="openModal(post)">
+    <div *ngFor="let post of posts" class="preview transition modal-field" [ngStyle]="{'background-image':'url(' + post.preview_url + ')'}" (click)="openModal(post)">
       <div *ngIf="post.source" class="preview-overlay">
         <p>{{ getSourceDisplay(post.source) }}: {{post.source.includes('http') ? 'Twitter' : post.source}}</p>
       </div>
@@ -25,7 +25,7 @@
 </div>
 
 <div #Modal class="modal">
-  <div *ngIf="currentPost as post" class="modal-content">
+  <div #ModalContent *ngIf="currentPost as post" class="modal-content modal-field">
     <div class="modal-header">
       <span>{{ getSourceDisplay(post.source) }}: {{post.source.includes('http') ? 'Twitter' : post.source}}</span>
       <div (click)="closeModal()" class="modal-button">
