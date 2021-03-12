@@ -72,3 +72,8 @@ html {
   margin: 1rem 0 0 0;
   font-size: 1.3rem;
 }
+
+.disabled {
+  pointer-events: none;
+  color: var(--secondary);
+}

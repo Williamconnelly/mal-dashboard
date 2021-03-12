@@ -14,11 +14,11 @@
   </ng-template>
 </div>
 <div *ngIf="posts$ | async" class="page-controls">
-  <div class="button" (click)="previousPage()">
+  <div class="button" (click)="changePage(false)" [ngClass]="currentPage === 1 ? 'disabled' : ''">
     <i class="fas fa-arrow-left button-icon" style="margin-right: 0.5rem;"></i>
     <span>Previous</span>
   </div>
-  <div class="button" (click)="nextPage()">
+  <div class="button" (click)="changePage(true)"  [ngClass]="posts$.value.length > 100">
     <span>Next</span>
     <i class="fas fa-arrow-right button-icon"></i>
   </div>

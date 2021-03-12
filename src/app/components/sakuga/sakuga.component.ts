@@ -24,26 +24,9 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('ModalContent', {static: false}) modalContent: ElementRef<HTMLElement>;
 
-  // @ViewChild('ModalContent', {static: false}) set modalContent(content: ElementRef<HTMLElement>) {
-  //   if (content) {
-  //     this._modalContent = content;
-  //     console.log('Apply Listener');
-  //     this.modalListener = this._renderer.listen('window', 'click', (event: Event) => {
-  //       if (event.target !== this._modalContent.nativeElement && this.currentPost) {
-  //         this.closeModal();
-  //       } 
-  //     });
-  //   } else {
-  //     if (this.modalListener) {
-  //       console.log('Remove Listener');
-  //       this.modalListener();
-  //     }
-  //   }
-  // }
-
-  // @ViewChildren('ModalContent') modalContent: QueryList<ElementRef<HTMLElement>>;
-
   @ViewChild('SakugaContainer', {static: false}) sakugaContainer: ElementRef<HTMLElement>;
+
+  public currentPage: number;
 
   constructor(private _sakuga: SakugaService, private _data: DataService, private _renderer: Renderer2) {
     this._sakuga.getPosts().pipe(
@@ -57,13 +40,21 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
       err => {
         console.error('Failed to fetch Sakuga', err);
       }
-    )
+    );
+
+    this._sakuga.currentPage$.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(
+      pageNumber => this.currentPage = pageNumber
+    );
+
   }
 
   ngOnInit() {
 
   }
 
+  // Click Listener for closing on external modal clicks
   @HostListener('window:click', ['$event']) onClick(e: MouseEvent) {
     if (this.modalContent) {
       const target = e.target as HTMLElement;
@@ -82,12 +73,9 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
     return (['op','ed','http','pv'].some(src => source.toLowerCase().includes(src))) ? 'Source' : 'Episode';
   }
 
-  public previousPage(): void {
-
-  }
-
-  public nextPage(): void {
-
+  public changePage(change: boolean): void {
+    this._sakuga.changePage(change);
+    this.sakugaContainer.nativeElement.scrollTo(0, 0);
   }
 
   ngOnDestroy() {

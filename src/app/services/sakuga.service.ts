@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { timeStamp } from 'console';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Post } from '../types/sakuga-types';
@@ -11,26 +12,47 @@ import { DataService } from './data-service/data-service';
 export class SakugaService {
 
   private readonly baseUrl= 'https://www.sakugabooru.com';
-  
-  private posts$ = new BehaviorSubject<Post[]>(null);
 
-  constructor(private _http: HttpClient) {
-    
+  private posts = new Map<number, Post[]>();
+
+  private display$ = new BehaviorSubject<Post[]>(null);
+
+  public pageSize = 100;
+
+  public currentPage$ = new BehaviorSubject<number>(1);
+  
+  private fetchedPages: number;
+
+  constructor(private _http: HttpClient, private _data: DataService) {
+
   }
 
-  public fetchPosts(query: string): void {
+  public fetchPosts(query: string, page?: number): void {
     console.log('FETCHING')
     const q = this.formatQueryString(query);
-    const url = `${this.baseUrl}/post.json?limit=100&tags=${q}`;
-    // return this._http.get<Post[]>(url);
+    const url = `${this.baseUrl}/post.json?limit=${this.pageSize}&tags=${q}${page ? `&page=${page}` : ''}`;
     this._http.get<Post[]>(url).pipe(
       take(1)
     ).subscribe(
       posts => {
-        this.posts$.next(posts);
+        if (page) {
+          this.posts.set(page, posts);
+          this.fetchedPages = page;
+        } else {
+          // Reset Pages
+          this.fetchedPages = 1;
+          this.currentPage$.next(1);
+          this.posts.clear();
+          // Update List
+          this.posts.set(1, posts);
+          // Update Display
+          this.display$.next(posts);
+          // Prepare Offset Page
+          this.fetchPosts(query, 2);
+        }
       }, 
       err => {
-        console.error('Failed to fetch Posts');
+        console.error('Failed to fetch Posts', err);
       }
     )
   }
@@ -41,7 +63,23 @@ export class SakugaService {
   }
 
   public getPosts(): Observable<Post[]> {
-    return this.posts$;
+    return this.display$;
+  }
+
+  public changePage(change: boolean): void {
+    // Update current page depending on next or previous change
+    this.currentPage$.next(change ? this.currentPage$.value + 1 : this.currentPage$.value - 1);
+    const page = this.currentPage$.value;
+    // Check if page is in map
+    if (this.posts.has(page)) {
+      // Check if additional page needs to be fetched
+      if (page === this.fetchedPages) {
+        this.fetchPosts(this._data.searchStrings.sakugaSearch.value, page + 1);
+      }
+      this.display$.next(this.posts.get(page));
+    } else {
+      console.error('Invalid Page', page);
+    }
   }
 
 }
