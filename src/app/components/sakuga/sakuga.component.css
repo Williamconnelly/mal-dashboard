@@ -148,3 +148,32 @@
   cursor: pointer;
   color: var(--primary);
 }
+
+.tags-display {
+  width: 20%;
+  color: #ffffff;
+  display: inline-block;
+  height: 100%;
+  vertical-align: top;
+}
+
+.video-display {
+  width: 80%;
+  display: inline-block;
+}
+
+.general {
+  color: #ee8887;
+}
+
+.copyright {
+  color: #D0D;
+}
+
+.artist {
+  color: #cccc00;
+}
+
+.terminology {
+  color: #0A0;
+}

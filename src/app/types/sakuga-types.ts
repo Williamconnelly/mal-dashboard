@@ -44,3 +44,11 @@ export interface Post {
   last_noted_at: number;
   last_commented_at: number;
 }
+
+export interface Tag {
+  ambiguous: boolean;
+  count: number;
+  id: number;
+  name: string;
+  type: number;
+}

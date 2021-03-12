@@ -3,7 +3,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
 import { SakugaService } from 'src/app/services/sakuga.service';
-import { Post } from 'src/app/types/sakuga-types';
+import { Post, Tag } from 'src/app/types/sakuga-types';
 
 @Component({
   selector: 'app-sakuga',
@@ -19,6 +19,8 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
   private _destroy$ = new Subject<boolean>();
 
   public currentPost: Post;
+
+  public currentTags$ = new BehaviorSubject<Tag[]>(null);
 
   @ViewChild('Modal', {static: false}) modal: ElementRef<HTMLElement>;
 
@@ -84,6 +86,16 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public openModal(post: Post): void {
+    this._sakuga.fetchTags(post.tags.split(' ')).pipe(
+      take(1)
+    ).subscribe(
+      tags => {
+        this.currentTags$.next(tags);
+      },
+      err => {
+        console.error('Failed to set current tags', err);
+      }
+    )
     this.currentPost = post;
     this.modal.nativeElement.style.display = 'block';
   }
@@ -102,6 +114,22 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
     this._sakuga.fetchPosts(tag);
     this.closeModal();
     this.sakugaContainer.nativeElement.scrollTo(0, 0);
+  }
+
+  public canPlay(post: Post): boolean {
+    const split = post.file_url.split('.')
+    const fileType = split[split.length - 1]
+    return !['png','jpg','gif'].includes(fileType);
+  }
+
+  public getTagClass(type: number): string {
+    switch(type) {
+      case(0): return 'general'; break; // General Tag
+      case(1): return 'artist'; break; // Artist Tag
+      case(2): return 'copyright'; break // Show Title Tag
+      case(3): return 'terminology'; break; // Sakuga Term
+      default: return 'general'; break;
+    }
   }
 
 }

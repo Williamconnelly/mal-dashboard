@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { timeStamp } from 'console';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { Post } from '../types/sakuga-types';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { map, take, tap } from 'rxjs/operators';
+import { Post, Tag } from '../types/sakuga-types';
 import { DataService } from './data-service/data-service';
 
 @Injectable({
@@ -55,6 +55,25 @@ export class SakugaService {
         console.error('Failed to fetch Posts', err);
       }
     )
+  }
+
+  public fetchTag(tag: string): Observable<Tag> {
+    const url = `${this.baseUrl}/tag.json?name=${tag}`;
+    return this._http.get<any>(url).pipe(
+      take(1)
+    );
+  }
+
+  public fetchTags(tags: string[]): Observable<Tag[]> {
+    const requests = tags.map(tag => this._http.get<Tag[]>(`${this.baseUrl}/tag.json?name=${tag}&order=count`));
+    return forkJoin(requests).pipe(
+      map(allTags => {
+        // Flatten matrix of tags
+        const tagsArray: Tag[] = [].concat(...allTags);
+        // Find exact tag from results
+        return tags.map(tag => tagsArray.find(resultTag => resultTag.name === tag));
+      })
+    );
   }
 
   private formatQueryString(query: string): string {
