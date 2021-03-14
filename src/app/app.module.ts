@@ -16,7 +16,7 @@ import { ExploreComponent } from './components/explore/explore.component';
 import { SakugaComponent } from './components/sakuga/sakuga.component';
 import { MediaViewComponent } from './components/media-view/media-view.component';
 import { ThemeModule } from './services/theme-service/themes.module';
-import { malTheme, devTheme } from './types/themes';
+import { malTheme, devTheme, payprTheme, refreshingBlues } from './types/themes';
 import { SettingsComponent } from './components/settings/settings.component';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 
@@ -43,8 +43,8 @@ import { DropdownComponent } from './components/dropdown/dropdown.component';
     FormsModule,
     ScrollingModule,
     ThemeModule.forRoot({
-      themes: [malTheme, devTheme],
-      active: 'MyAnimeList'
+      themes: [malTheme, devTheme, payprTheme, refreshingBlues],
+      active: 'RefreshingBlues'
     })
   ],
   providers: [],

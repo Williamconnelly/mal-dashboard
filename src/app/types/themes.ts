@@ -60,6 +60,20 @@ export const payprTheme: Theme = {
   }
 }
 
+export const refreshingBlues: Theme = {
+  name: 'RefreshingBlues',
+  properties: {
+    '--background': '#25274d',
+    '--background-text': '#ffffff',
+    '--primary': '#2d9cca',
+    '--primary-text': '#ffffff',
+    '--secondary': '#29658a',
+    '--secondary-text': '#ffffff',
+    '--surface': '#29658a',
+    '--surface-text': '#ffffff'
+  }
+}
+
 export interface ThemeOptions {
   themes: Theme[];
   active: string;

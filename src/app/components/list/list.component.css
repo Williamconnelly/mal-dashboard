@@ -81,4 +81,5 @@ tr:not(.table-header-row):hover {
 .sticky-header {
   /* Subtracting header width to align with scrollbar */
   width: calc(100% - 20px);
+  color: var(--background-text);
 }

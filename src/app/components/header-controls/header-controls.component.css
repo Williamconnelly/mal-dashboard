@@ -2,9 +2,6 @@
   height: 4rem;
   width: 100%;
   background-color: var(--secondary);
-  border-width: 1px 0px;
-  border-style: ridge;
-  border-color: var(--secondary-text);
   padding: 0.3rem 2rem;
   box-sizing: border-box;
   display: flex;
@@ -30,7 +27,7 @@
   position: absolute;
   border: 1px solid #000000;
   top: 13px;
-  left: 20.5rem;
+  left: 20rem;
   padding: 0 0.5rem;
   border-radius: 4px;
 }

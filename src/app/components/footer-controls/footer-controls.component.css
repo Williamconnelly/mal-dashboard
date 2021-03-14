@@ -2,10 +2,6 @@
   height: 3rem;
   width: 100%;
   background-color: var(--secondary);
-  border-width: 1px 0px;
-  border-style: ridge;
-  /* border-color: #909090; */
-  border-color: var(--secondary-text);
   padding: 0.3rem 2rem;
   box-sizing: border-box;
   display: flex;
@@ -63,6 +59,8 @@
   opacity: 0;
   font-size: 0.7rem;
   margin-left: 0.8rem;
+  /* TEMP */
+  display: none;
 }
 
 .tooltip-icon:hover {

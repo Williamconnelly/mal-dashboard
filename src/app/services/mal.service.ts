@@ -73,6 +73,7 @@ export class MALService {
     'studios',
     'statistics',
     // (?) Missing (?)
+    // Recommendations
     // Staff
     // Characters
   ];

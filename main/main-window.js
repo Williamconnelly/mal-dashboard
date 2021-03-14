@@ -14,6 +14,9 @@ function createAppWindow() {
     },
     setMenu: null
   });
+
+  // mainWindow.removeMenu();
+
   mainWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, `/../dist/index.html`),
