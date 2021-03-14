@@ -10,6 +10,10 @@
   display: flex;
 }
 
+.search-wrapper {
+  position: relative;
+}
+
 .searchbar {
   margin-top: 0.3rem;
   width: 25rem;
@@ -20,6 +24,21 @@
   color: #000000;
   font-size: 1.1rem;
   border-radius: 4px;
+}
+
+.search-prompt {
+  position: absolute;
+  border: 1px solid #000000;
+  top: 13px;
+  left: 20.5rem;
+  padding: 0 0.5rem;
+  border-radius: 4px;
+}
+
+.search-prompt:hover {
+  cursor: pointer;
+  background-color: var(--primary);
+  color: var(--primary-text);
 }
 
 .header-button {
@@ -120,4 +139,13 @@ input:checked + .slider:before {
 input:checked + .slider:after
 {  
   content:'MANGA';
+}
+
+.enabled {
+  background-color: var(--primary);
+  color: var(--primary-text);
+}
+
+.search-button-enabled {
+  padding-right: 5rem;
 }

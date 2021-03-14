@@ -7,7 +7,16 @@
       (ngModelChange)="searchFieldChanged($event)"
       spellcheck="false"
       (keydown.enter)="executeSearch($event.target.value)"
+      [ngClass]="['/sakuga','/explore'].includes(currentRoute) ? 'search-button-enabled' : ''"
     >
+    <div 
+      *ngIf="['/sakuga','/explore'].includes(currentRoute)" 
+      class="search-prompt" 
+      (click)="executeSearch(searchString)" 
+      [ngClass]="searchString && searchString.length ? 'enabled' : 'disabled'"
+    >
+      <span>Search</span>
+    </div>
   </div>
   <div class="header-button" [routerLink]="['/stats']" [routerLinkActive]="['active']">
     <i class="header-icon far fa-chart-bar"></i>

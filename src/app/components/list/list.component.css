@@ -1,11 +1,12 @@
 .list-wrapper {
-  height: calc(100% - 4rem - 3rem);
+  height: calc(100% - 4rem - 5.5rem);
   overflow: auto;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--background-text);
+  border-top: 1px solid var(--primary)
 }
 
 table {
@@ -19,31 +20,13 @@ th, td:not(.expanding-row) {
   text-align: left;
 }
 
-th {
-  border-bottom: 1px solid var(--primary);
-}
-
-tr:not(:first-child):not(.expanding-row-container) {
-  position: relative;
-  -webkit-transform: scale(1);
-  transform: scale(1);
-}
-
-tr:not(:first-child):hover {
+tr:not(.table-header-row):hover {
   background-color: var(--primary);
   color: var(--primary-text);
 }
 
-tr:not(:first-child):hover .preview-image {
-  display: block;
-}
-
-tr:not(:first-child) td {
+.tr:first-child td {
   padding-left: 17px;
-}
-
-tr:not(:first-child):hover td:first-child:not(.expanding-row) {
-  cursor: pointer;
 }
 
 .expanding-row {
@@ -92,6 +75,10 @@ tr:not(:first-child):hover td:first-child:not(.expanding-row) {
 }
 
 .edit-icon:hover {
-  color: var(--primary);
   cursor: pointer;
+}
+
+.sticky-header {
+  /* Subtracting header width to align with scrollbar */
+  width: calc(100% - 20px);
 }

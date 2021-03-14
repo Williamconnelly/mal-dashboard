@@ -19,6 +19,8 @@ export class HeaderControlsComponent implements OnInit, OnDestroy {
 
   public searchString = '';
 
+  public currentRoute: string;
+
   private _destroy$ = new Subject<boolean>();
 
   constructor(private _data: DataService, private _router: Router, private _ipc: IPCService, private _sakuga: SakugaService) {
@@ -37,6 +39,8 @@ export class HeaderControlsComponent implements OnInit, OnDestroy {
       takeUntil(this._destroy$)
     ).subscribe(
       (nav: NavigationEnd) => {
+        // Set currentRoute
+        this.currentRoute = nav.url;
         // Set Searchbar to cached search string
         if (nav.url === '/list') {
           this.searchString = this._data.searchStrings.listSearch.value;

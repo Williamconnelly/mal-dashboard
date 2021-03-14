@@ -1,16 +1,18 @@
 <ng-container *ngIf="infinite | async as nodes">  
+  <table class="sticky-header">
+    <tr class="table-header-row">
+      <th style="width: 5;">Image</th>
+      <th style="width: 55%;">Title</th>
+      <th style="width: 10%;">Score</th>
+      <th style="width: 10%;">Type</th>
+      <th style="width: 10%;">Status</th>
+      <th style="width: 10%;"></th>
+    </tr>
+  </table>
   <div class="list-wrapper">
     <ng-container *ngIf="nodes.length; else NoData">
       <cdk-virtual-scroll-viewport [itemSize]="rowSize" class="scroll-viewport" (scrolledIndexChange)="nextBatch($event, (nodes[nodes.length - 1].id))" appViewportResize>
         <table>
-          <tr class="table-header-row">
-            <th style="width: 5;">Image</th>
-            <th style="width: 55%;">Title</th>
-            <th style="width: 10%;">Score</th>
-            <th style="width: 10%;">Type</th>
-            <th style="width: 10%;">Status</th>
-            <th style="width: 10%;"></th>
-          </tr>
           <ng-container *cdkVirtualFor="let media of nodes; let i = index; templateCacheSize: 0">
             <tr (click)="toggleExpandedContent(media.id)" class="table-body-row">
               <ng-container *ngIf="media">
