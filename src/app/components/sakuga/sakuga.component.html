@@ -34,9 +34,11 @@
     </div>
     <div class="modal-body">
       <div *ngIf="currentTags$ | async as tags" class="tags-display">
-        <div *ngFor="let tag of tags">
-          <span [ngClass]="getTagClass(tag.type)">{{tag.name}}:{{tag.count}}</span>
-        </div>
+        <ul>
+          <li *ngFor="let tag of tags" [ngClass]="getTagClass(tag.type)">
+            <span (click)="selectTag(tag.name)" class="tag">{{tag.name}}: <span class="tag-count">{{tag.count}}</span></span>
+          </li>
+        </ul>
       </div>
       <div class="video-display">
         <video *ngIf="canPlay(post); else DisplayImage" width="100%" autoplay controls>
@@ -47,11 +49,6 @@
         </ng-template>
       </div>
     </div>
-    <!-- <div class="tags-container">
-      <div *ngFor="let tag of getTags(post)" class="tag" (click)="selectTag(tag)">
-        <span>{{tag}}</span>
-      </div>
-    </div> -->
   </div>
 </div>
 

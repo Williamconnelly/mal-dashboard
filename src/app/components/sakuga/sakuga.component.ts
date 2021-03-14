@@ -90,6 +90,7 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
       take(1)
     ).subscribe(
       tags => {
+        console.log('Got Tags', tags);
         this.currentTags$.next(tags);
       },
       err => {
@@ -126,8 +127,8 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
     switch(type) {
       case(0): return 'general'; break; // General Tag
       case(1): return 'artist'; break; // Artist Tag
-      case(2): return 'copyright'; break // Show Title Tag
-      case(3): return 'terminology'; break; // Sakuga Term
+      case(3): return 'copyright'; break // Show Title Tag
+      case(4): return 'terminology'; break; // Sakuga Term
       default: return 'general'; break;
     }
   }

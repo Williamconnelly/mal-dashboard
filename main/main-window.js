@@ -4,8 +4,10 @@ const path = require("path");
 
 function createAppWindow() {
   let  mainWindow = new BrowserWindow({
-    width: 1600,
-    height: 1000,
+    width: 1250,
+    height: 800,
+    minWidth: 1200,
+    minHeight: 600,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,

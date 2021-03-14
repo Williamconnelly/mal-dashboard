@@ -98,7 +98,7 @@
   background-color: #000000;
   margin: 3rem auto;
   padding: 0 1rem 1rem 1rem;
-  width: 60%;
+  width: 85%;
   border-radius: 7px;
 }
 
@@ -132,33 +132,30 @@
   border-radius: 3px;
 }
 
-.tag {
-  background-color: #ffffff;
-  color: #000000;
-  display: inline-block;
-  margin: 1rem;
-  padding: 0.5rem;
-  border-radius: 10px;
-  font-weight: bold;
-  min-width: 14rem;
-  text-align: center;
-}
-
-.tag:hover {
-  cursor: pointer;
-  color: var(--primary);
+.modal-body {
+  display: flex;
 }
 
 .tags-display {
-  width: 20%;
-  color: #ffffff;
-  display: inline-block;
+  width: 25%;
   height: 100%;
   vertical-align: top;
+  margin-right: 1rem;
+  word-wrap: break-word;
+}
+
+.tag:hover {
+  color: #33CFFF;
+  cursor: pointer;
+}
+
+.tags-display ul {
+  padding-inline-start: 1.2rem;
+  margin: 0;
 }
 
 .video-display {
-  width: 80%;
+  flex-grow: 1;
   display: inline-block;
 }
 
@@ -176,4 +173,26 @@
 
 .terminology {
   color: #0A0;
+}
+
+.tag-count {
+  color:#AAA;
+}
+
+@media only screen and (max-width: 2560px) {
+  .tags-display {
+    width: 15%;
+  }
+}
+
+@media only screen and (max-width: 1920px) {
+  .tags-display {
+    width: 20%;
+  }
+}
+
+@media only screen and (max-width: 1919px) {
+  .tags-display {
+    width: 25%;
+  }
 }
