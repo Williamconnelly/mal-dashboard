@@ -29,12 +29,14 @@ export class SakugaService {
 
   public fetchPosts(query: string, page?: number): void {
     console.log('FETCHING')
+    this._data.loadingStatus.sakugaLoading$.next(true);
     const q = this.formatQueryString(query);
     const url = `${this.baseUrl}/post.json?limit=${this.pageSize}&tags=${q}${page ? `&page=${page}` : ''}`;
     this._http.get<Post[]>(url).pipe(
       take(1)
     ).subscribe(
       posts => {
+        this._data.loadingStatus.sakugaLoading$.next(false);
         if (page) {
           this.posts.set(page, posts);
           this.fetchedPages = page;

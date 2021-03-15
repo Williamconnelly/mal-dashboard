@@ -12,13 +12,16 @@
       <p>No Results Found</p>
     </div>
   </ng-template>
+  <ngx-spinner [name]="'sakugaSpinner'" bdColor="rgba(0, 0, 0, 0.8)" size="medium" [color]="getPrimaryColor()" type="ball-clip-rotate-pulse" [fullScreen]="false">
+    <!-- <p style="color: white" > Loading... </p> -->
+  </ngx-spinner>
 </div>
 <div *ngIf="posts$ | async" class="page-controls">
   <div class="button" (click)="changePage(false)" [ngClass]="currentPage === 1 ? 'disabled' : ''">
     <i class="fas fa-arrow-left button-icon" style="margin-right: 0.5rem;"></i>
     <span>Previous</span>
   </div>
-  <div class="button" (click)="changePage(true)" [ngClass]="posts$.value.length < 100 ? 'disabled' : ''">
+  <div class="button" (click)="changePage(true)" [ngClass]="sakugaLoading || posts$.value.length < 100 ? 'disabled' : ''">
     <span>Next</span>
     <i class="fas fa-arrow-right button-icon"></i>
   </div>
@@ -33,15 +36,18 @@
       </div>
     </div>
     <div class="modal-body">
-      <div *ngIf="currentTags$ | async as tags" class="tags-display">
-        <ul>
+      <div class="tags-display" [ngClass]="tagsLoading ? 'loading-tags' : ''">
+        <ul *ngIf="currentTags$ | async as tags">
           <li *ngFor="let tag of tags" [ngClass]="getTagClass(tag.type)">
             <span (click)="selectTag(tag.name)" class="tag">{{tag.name}}: <span class="tag-count">{{tag.count}}</span></span>
           </li>
         </ul>
+        <ngx-spinner [name]="'tagSpinner'" bdColor="rgba(0, 0, 0, 0.8)" size="medium" [color]="getPrimaryColor()" type="ball-clip-rotate-pulse" [fullScreen]="false">
+          <!-- <p style="color: white" > Loading... </p> -->
+        </ngx-spinner>
       </div>
       <div class="video-display">
-        <video *ngIf="canPlay(post); else DisplayImage" width="100%" autoplay controls>
+        <video *ngIf="canPlay(post); else DisplayImage" width="100%" autoplay controls loop>
           <source src="{{post.file_url}}" type="video/mp4">
         </video>
         <ng-template #DisplayImage>

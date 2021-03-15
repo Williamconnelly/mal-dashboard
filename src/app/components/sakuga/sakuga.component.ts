@@ -1,8 +1,10 @@
 import { AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
 import { SakugaService } from 'src/app/services/sakuga.service';
+import { ThemeService } from 'src/app/services/theme-service/theme.service';
 import { Post, Tag } from 'src/app/types/sakuga-types';
 
 @Component({
@@ -28,9 +30,19 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('SakugaContainer', {static: false}) sakugaContainer: ElementRef<HTMLElement>;
 
+  public tagsLoading: boolean;
+
+  public sakugaLoading: boolean;
+
   public currentPage: number;
 
-  constructor(private _sakuga: SakugaService, private _data: DataService, private _renderer: Renderer2) {
+  constructor(
+    private _sakuga: SakugaService, 
+    private _data: DataService, 
+    private _renderer: Renderer2, 
+    private _theme: ThemeService, 
+    private _spinner: NgxSpinnerService
+  ) {
     this._sakuga.getPosts().pipe(
       filter(posts => !!posts),
       takeUntil(this._destroy$)
@@ -50,10 +62,28 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
       pageNumber => this.currentPage = pageNumber
     );
 
+    this._data.loadingStatus.sakugaLoading$.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(
+      loading => {
+        this.sakugaLoading = loading;
+        loading ? this._spinner.show('sakugaSpinner') : this._spinner.hide('sakugaSpinner');
+      }
+    );
+
+    this._data.loadingStatus.tagLoading$.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(
+      loading => {
+        this.tagsLoading = loading;
+        loading ? this._spinner.show('tagSpinner') : this._spinner.hide('tagSpinner')
+      }
+    );
+
   }
 
   ngOnInit() {
-
+    
   }
 
   // Click Listener for closing on external modal clicks
@@ -86,10 +116,12 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public openModal(post: Post): void {
+    this._data.loadingStatus.tagLoading$.next(true);
     this._sakuga.fetchTags(post.tags.split(' ')).pipe(
       take(1)
     ).subscribe(
       tags => {
+        this._data.loadingStatus.tagLoading$.next(false);
         console.log('Got Tags', tags);
         this.currentTags$.next(tags);
       },
@@ -103,11 +135,8 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public closeModal(): void {
     this.currentPost = null;
+    this.currentTags$.next(null);
     this.modal.nativeElement.style.display = 'none';
-  }
-
-  public getTags(post: Post): string[] {
-    return post.tags.split(' ');
   }
 
   public selectTag(tag: string): void {
@@ -131,6 +160,10 @@ export class SakugaComponent implements OnInit, OnDestroy, AfterViewInit {
       case(4): return 'terminology'; break; // Sakuga Term
       default: return 'general'; break;
     }
+  }
+
+  public getPrimaryColor(): string {
+    return this._theme.getActiveTheme().properties['--primary'];
   }
 
 }

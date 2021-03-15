@@ -144,5 +144,5 @@ input:checked + .slider:after
 }
 
 .search-button-enabled {
-  padding-right: 5rem;
+  padding-right: 5.5rem;
 }

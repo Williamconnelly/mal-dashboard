@@ -23,7 +23,7 @@ export class ThemeService {
     return this.themes;
   }
 
-  public getActiveTheme() {
+  public getActiveTheme(): Theme {
     return JSON.parse(JSON.stringify(this.getTheme(this.theme)));
   }
 

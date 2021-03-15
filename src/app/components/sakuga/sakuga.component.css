@@ -1,5 +1,6 @@
 .sakuga-wrapper {
   padding: 1rem;
+  position: relative;
 }
 
 .sakuga-container {
@@ -141,6 +142,7 @@
   vertical-align: top;
   margin-right: 1rem;
   word-wrap: break-word;
+  position: relative;
 }
 
 .tag:hover {
@@ -194,4 +196,8 @@
   .tags-display {
     width: 25%;
   }
+}
+
+.loading-tags {
+  padding-top: 25%;
 }

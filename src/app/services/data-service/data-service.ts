@@ -56,6 +56,13 @@ export class DataService {
     sakugaSearch: new BehaviorSubject<string>('')
   };
 
+  public loadingStatus = {
+    listLoading$: new BehaviorSubject<boolean>(true),
+    sakugaLoading$: new BehaviorSubject<boolean>(false),
+    tagLoading$:new BehaviorSubject<boolean>(true),
+    exploreLoading$: new BehaviorSubject<boolean>(true)
+  };
+
   constructor(private _mal: MALService, private _ipc: IPCService) {
     this._mal.getListData().pipe(
       filter(list => !!list),

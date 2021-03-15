@@ -7,6 +7,7 @@ import { debounceTime, filter, map, mergeMap, scan, take, takeUntil, tap, thrott
 import { DataService } from 'src/app/services/data-service/data-service';
 import { DataManagerService } from 'src/app/services/data-service/data-service-manager';
 import { MALService } from 'src/app/services/mal.service';
+import { ThemeService } from 'src/app/services/theme-service/theme.service';
 import { ListNode, UserList } from 'src/app/types/mal-types';
 import { ExpandedContentComponent } from '../expanded-content/expanded-content.component';
 
@@ -42,7 +43,8 @@ export class ListComponent implements OnInit, AfterViewInit {
   constructor(
     private _data: DataService, 
     private _cd: ChangeDetectorRef,
-    private _spinner: NgxSpinnerService
+    private _spinner: NgxSpinnerService,
+    private _theme: ThemeService
   ) {
     this._data.getListData().pipe(
       filter(list => !!list),
@@ -73,21 +75,30 @@ export class ListComponent implements OnInit, AfterViewInit {
         ).subscribe(
           data => {
             if (data) {
-              this._spinner.hide();
+              // No longer fetching
+              this._data.loadingStatus.listLoading$.next(false);
+              // this._spinner.hide('listSpinner');
             }
           }
         )
-
       }, 
       err => {
         console.error(err);
       }
     )
-
   }
 
   ngOnInit() {
-    this._spinner.show();
+    this._data.loadingStatus.listLoading$.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(
+      loading => {
+        console.log(loading);
+        loading ? this._spinner.show('listSpinner') : this._spinner.hide('listSpinner');
+      }
+    )
+
+    this._data.loadingStatus.listLoading$.next(true);
   }
 
   ngAfterViewInit() {
@@ -131,6 +142,10 @@ export class ListComponent implements OnInit, AfterViewInit {
     return arrObs.pipe(
       tap(arr => (arr.length ? null : (this.theEnd = true)))
     )
+  }
+
+  public getPrimaryColor(): string {
+    return this._theme.getActiveTheme().properties['--primary'];
   }
 
 }

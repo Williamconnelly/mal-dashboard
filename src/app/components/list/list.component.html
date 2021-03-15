@@ -1,69 +1,69 @@
-<ng-container *ngIf="infinite | async as nodes; else Loading">
-  <table class="sticky-header">
-    <tr class="table-header-row">
-      <th style="width: 5%;">Image</th>
-      <th style="width: 50%;">Title</th>
-      <th style="width: 10%;">Score</th>
-      <th style="width: 10%;">Progress</th>
-      <th style="width: 10%;">Status</th>
-      <th style="width: 10%;">Type</th>
-      <th style="width: 5%;"></th>
-    </tr>
-  </table>
-  <div class="list-wrapper">
-    <ng-container *ngIf="nodes.length; else NoData">
-      <cdk-virtual-scroll-viewport [itemSize]="rowSize" class="scroll-viewport" (scrolledIndexChange)="nextBatch($event, (nodes[nodes.length - 1].id))" appViewportResize>
-        <table>
-          <ng-container *cdkVirtualFor="let media of nodes; let i = index; templateCacheSize: 0">
-            <tr (click)="toggleExpandedContent(media.id)" class="table-body-row">
-              <ng-container *ngIf="media">
-                <td style="width: 5%;">
-                  <div class="table-image" [ngStyle]="{'background-image':'url(' + media.main_picture.medium + ')'}"></div>
-                </td>
-                <td style="width: 50%;">{{media.title}}</td>
-                <td style="width: 10%;">{{media.my_list_status.score || '--'}}</td>
-                <td style="width: 10%;">{{media.my_list_status.num_episodes_watched}} / {{media.num_episodes}}</td>
-                <td style="width: 10%;">{{media.my_list_status.status | titlecase}}</td>
-                <td style="width: 10%;">{{media.media_type | uppercase}}</td>
-                <td style="width: 5%">
-                  <div [routerLink]="['/list', media.id]" style="outline: none; display: inline-block;">
-                    <i class="edit-icon far fa-edit"></i>
-                  </div>
-                </td>
-              </ng-container>
-              <ng-container *ngIf="!media">
-                <td style="width: 5%;"></td>
-                <td style="width: 50%;">Loading...</td>
-                <td style="width: 10%;">Loading...</td>
-                <td style="width: 10%;">Loading...</td>
-                <td style="width: 10%;">Loading...</td>
-                <td style="width: 10%;">Loading...</td>
-                <td style="width: 5%;"></td>
-              </ng-container>
-            </tr>
-            <tr class="expanding-row-container">
-              <td colspan="6" class="expanding-row">
-                <app-expanded-content #expandedContent [listNode]="media"></app-expanded-content>
-              </td>
-            </tr>
-          </ng-container>
-        </table>
-      </cdk-virtual-scroll-viewport>
-    </ng-container>
-  </div>
-</ng-container>
 
-<ng-template #NoData>
-  <div class="no-data">
-    <i class="no-data-icon far fa-times-circle"></i>
-    <p>No Results Found</p>
-  </div>
-</ng-template>
+<div class="page-wrapper">
+  <ng-container *ngIf="infinite | async as nodes">
+    <table class="sticky-header">
+      <tr class="table-header-row">
+        <th style="width: 5%;">Image</th>
+        <th style="width: 50%;">Title</th>
+        <th style="width: 10%;">Score</th>
+        <th style="width: 10%;">Progress</th>
+        <th style="width: 10%;">Status</th>
+        <th style="width: 10%;">Type</th>
+        <th style="width: 5%;"></th>
+      </tr>
+    </table>
+    <div class="list-wrapper">
+      <ng-container *ngIf="nodes.length; else NoData">
+        <cdk-virtual-scroll-viewport [itemSize]="rowSize" class="scroll-viewport" (scrolledIndexChange)="nextBatch($event, (nodes[nodes.length - 1].id))" appViewportResize>
+          <table>
+            <ng-container *cdkVirtualFor="let media of nodes; let i = index; templateCacheSize: 0">
+              <tr (click)="toggleExpandedContent(media.id)" class="table-body-row">
+                <ng-container *ngIf="media">
+                  <td style="width: 5%;">
+                    <div class="table-image" [ngStyle]="{'background-image':'url(' + media.main_picture.medium + ')'}"></div>
+                  </td>
+                  <td style="width: 50%;">{{media.title}}</td>
+                  <td style="width: 10%;">{{media.my_list_status.score || '--'}}</td>
+                  <td style="width: 10%;">{{media.my_list_status.num_episodes_watched}} / {{media.num_episodes}}</td>
+                  <td style="width: 10%;">{{media.my_list_status.status | titlecase}}</td>
+                  <td style="width: 10%;">{{media.media_type | uppercase}}</td>
+                  <td style="width: 5%">
+                    <div [routerLink]="['/list', media.id]" style="outline: none; display: inline-block;">
+                      <i class="edit-icon far fa-edit"></i>
+                    </div>
+                  </td>
+                </ng-container>
+                <ng-container *ngIf="!media">
+                  <td style="width: 5%;"></td>
+                  <td style="width: 50%;">Loading...</td>
+                  <td style="width: 10%;">Loading...</td>
+                  <td style="width: 10%;">Loading...</td>
+                  <td style="width: 10%;">Loading...</td>
+                  <td style="width: 10%;">Loading...</td>
+                  <td style="width: 5%;"></td>
+                </ng-container>
+              </tr>
+              <tr class="expanding-row-container">
+                <td colspan="7" class="expanding-row">
+                  <app-expanded-content #expandedContent [listNode]="media"></app-expanded-content>
+                </td>
+              </tr>
+            </ng-container>
+          </table>
+        </cdk-virtual-scroll-viewport>
+      </ng-container>
+    </div>
+  </ng-container>
 
-<ng-template #Loading>
-  <div class="loader">
-    <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-clip-rotate-pulse" [fullScreen]="false">
-      <p style="color: white" > Loading... </p>
-    </ngx-spinner>
-  </div>
-</ng-template>
+  <ng-template #NoData>
+    <div class="no-data">
+      <i class="no-data-icon far fa-times-circle"></i>
+      <p>No Results Found</p>
+    </div>
+  </ng-template>
+
+  <ngx-spinner [name]="'listSpinner'" bdColor="rgba(0, 0, 0, 0.8)" size="medium" [color]="getPrimaryColor()" type="ball-clip-rotate-pulse" [fullScreen]="false">
+    <!-- <p style="color: white" > Loading... </p> -->
+  </ngx-spinner>
+
+</div>
