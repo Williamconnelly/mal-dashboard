@@ -15,6 +15,7 @@ function createAppWindow() {
     setMenu: null
   });
 
+  mainWindow.webContents.openDevTools();
   // mainWindow.removeMenu();
 
   mainWindow.loadURL(

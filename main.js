@@ -11,7 +11,6 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = createAppWindow();
-  mainWindow.webContents.openDevTools();
 };
 
 app.on('ready', createWindow);

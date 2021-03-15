@@ -1,6 +1,7 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { debounceTime, filter, map, mergeMap, scan, take, takeUntil, tap, throttleTime } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
@@ -40,10 +41,8 @@ export class ListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private _data: DataService, 
-    private _mal: MALService,
-    private _router: Router,
-    private _activeRoute: ActivatedRoute,
-    private _cd: ChangeDetectorRef
+    private _cd: ChangeDetectorRef,
+    private _spinner: NgxSpinnerService
   ) {
     this._data.getListData().pipe(
       filter(list => !!list),
@@ -55,9 +54,7 @@ export class ListComponent implements OnInit, AfterViewInit {
         this.offset.next(null);
         this.theEnd = false;
         const batchMap = this.offset.pipe(
-          // throttleTime(500),
           mergeMap(n => {
-            // console.log('get batch', this.getBatch(n));
             return this.getBatch(n)
           }),
           scan((acc, batch) => {
@@ -69,15 +66,28 @@ export class ListComponent implements OnInit, AfterViewInit {
           return Object.values(v)
         }));
         
+        // Disable Spinner when data recieved
+        this.infinite.pipe(
+          filter(data => !!data),
+          take(1)
+        ).subscribe(
+          data => {
+            if (data) {
+              this._spinner.hide();
+            }
+          }
+        )
+
       }, 
       err => {
         console.error(err);
       }
     )
+
   }
 
   ngOnInit() {
-    
+    this._spinner.show();
   }
 
   ngAfterViewInit() {

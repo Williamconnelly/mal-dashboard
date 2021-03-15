@@ -1,4 +1,4 @@
-<ng-container *ngIf="infinite | async as nodes">  
+<ng-container *ngIf="infinite | async as nodes; else Loading">
   <table class="sticky-header">
     <tr class="table-header-row">
       <th style="width: 5%;">Image</th>
@@ -57,5 +57,13 @@
   <div class="no-data">
     <i class="no-data-icon far fa-times-circle"></i>
     <p>No Results Found</p>
+  </div>
+</ng-template>
+
+<ng-template #Loading>
+  <div class="loader">
+    <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-clip-rotate-pulse" [fullScreen]="false">
+      <p style="color: white" > Loading... </p>
+    </ngx-spinner>
   </div>
 </ng-template>

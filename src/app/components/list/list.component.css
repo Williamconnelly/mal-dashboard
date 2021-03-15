@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   color: var(--background-text);
-  border-top: 1px solid var(--primary)
+  border-top: 1px solid var(--primary);
 }
 
 table {
@@ -82,4 +82,9 @@ tr:not(.table-header-row):hover {
   /* Subtracting header width to align with scrollbar */
   width: calc(100% - 20px);
   color: var(--background-text);
+}
+
+.loader {
+  position: relative;
+  height: calc(100% - 4rem - 5.5rem);
 }
