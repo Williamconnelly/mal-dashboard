@@ -8,9 +8,12 @@ export interface ListStatus {
   finish_date?: string;
 }
 
-export interface UserList {
+export interface MALList {
   data: { node: ListNode }[];
-  paging: object;
+  paging: {
+    next?: string;
+    previous?: string;
+  };
 };
 
 export interface MALImage {

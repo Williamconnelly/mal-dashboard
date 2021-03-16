@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { MediaConfig, MediaConfigMap } from 'src/app/types/media-types';
 import { Post } from 'src/app/types/sakuga-types';
-import { ListNode, UserList } from '../../types/mal-types';
+import { ListNode, MALList } from '../../types/mal-types';
 import { IPCService } from '../ipc.service';
 import { MALService } from '../mal.service';
 import { SakugaService } from '../sakuga.service';

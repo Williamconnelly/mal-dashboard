@@ -8,7 +8,7 @@ import { DataService } from 'src/app/services/data-service/data-service';
 import { DataManagerService } from 'src/app/services/data-service/data-service-manager';
 import { MALService } from 'src/app/services/mal.service';
 import { ThemeService } from 'src/app/services/theme-service/theme.service';
-import { ListNode, UserList } from 'src/app/types/mal-types';
+import { ListNode, MALList } from 'src/app/types/mal-types';
 import { ExpandedContentComponent } from '../expanded-content/expanded-content.component';
 
 @Component({

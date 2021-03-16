@@ -2,9 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { async } from '@angular/core/testing';
 import { ipcMain, IpcRenderer } from 'electron';
-import { BehaviorSubject, from, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { UserList } from '../types/mal-types';
+import { BehaviorSubject, EMPTY, forkJoin, from, Observable, of } from 'rxjs';
+import { concatMap, expand, map, mergeAll, switchMap, take, takeWhile, tap, toArray } from 'rxjs/operators';
+import { ListNode, MALList } from '../types/mal-types';
 import { IPCService } from './ipc.service';
 
 interface MalAuthResponse {
@@ -36,7 +36,7 @@ export class MALService {
 
   private malTokenInfo: MalTokenResponse;
 
-  private list$ = new BehaviorSubject<UserList>(null);
+  private list$ = new BehaviorSubject<MALList>(null);
 
   // Included in getUserList request
   private enabledRequestFields = [
@@ -194,22 +194,52 @@ export class MALService {
     return this._http.get(url, headers);
   }
 
-  private getUserList(): Observable<UserList> {
+  private getUserList(): Observable<MALList> {
     const baseUrl = 'https://api.myanimelist.net/v2/users/@me/animelist';
     const headers = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this.malTokenInfo.access_token}`)
     };
     const includedFields = this.enabledRequestFields.toString();
     const url = `${baseUrl}?fields=${includedFields}&nsfw=true&limit=999`;
-    return this._http.get<UserList>(url, headers);
+    return this._http.get<MALList>(url, headers);
   }
 
-  public getListData(): BehaviorSubject<UserList> {
+  public getListData(): BehaviorSubject<MALList> {
     return this.list$;
   }
 
   public getDirectoryContents(filepath: string): Observable<string[]> {
     return from<Promise<string[]>>(this._ipc.renderer.invoke('directory-contents', filepath));
+  }
+
+  private getQueryPage(query: string, offset?: number): Observable<MALList> {
+    const baseUrl = 'https://api.myanimelist.net/v2/anime';
+    const queryUrl = `${baseUrl}?q=${query}&limit=100&nsfw=true&fields=${this.enabledRequestFields.toString()}${offset ? `&offset=${offset}` : ''}`;
+    const headers = {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this.malTokenInfo.access_token}`)
+    };
+    return this._http.get<MALList>(queryUrl, headers);
+  }
+
+  public getQueryList(query: string): Observable<MALList> {
+    let offset = 0;
+    return this.getQueryPage(query).pipe(
+      expand(list => {
+        if (list.paging.next) {
+          offset += 100;
+          return this.getQueryPage(query, offset);
+        } else {
+          return EMPTY;
+        }
+      }),
+      toArray(),
+      map(results => {
+        return {
+          data: [].concat(...results.map<{node: ListNode}[]>(result => result.data)),
+          paging: null
+        }
+      })
+    )
   }
 
   // Generate a secure random string using the browser crypto functions
