@@ -1,14 +1,11 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { debounceTime, filter, map, mergeMap, scan, take, takeUntil, tap, throttleTime } from 'rxjs/operators';
+import { filter, map, mergeMap, scan, take, takeUntil, tap } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
-import { DataManagerService } from 'src/app/services/data-service/data-service-manager';
-import { MALService } from 'src/app/services/mal.service';
 import { ThemeService } from 'src/app/services/theme-service/theme.service';
-import { ListNode, MALList } from 'src/app/types/mal-types';
+import { ListNode } from 'src/app/types/mal-types';
 import { ExpandedContentComponent } from '../expanded-content/expanded-content.component';
 
 @Component({
@@ -24,8 +21,6 @@ export class ListComponent implements OnInit, AfterViewInit {
 
   public list$ = new BehaviorSubject<ListNode[]>(null);
 
-  public dataSource: DataManagerService;
-
   // CDK Props
 
   private batchSize = 20;
@@ -34,7 +29,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
   private theEnd = false;
 
-  private  offset = new BehaviorSubject(null);
+  private offset = new BehaviorSubject(null);
 
   public infinite: Observable<any[]>;
 
@@ -114,16 +109,16 @@ export class ListComponent implements OnInit, AfterViewInit {
     this._destroy$.next(null);
   };
 
-  // Added
+  // Virtual Scrolling
 
   public nextBatch(e, offset) {
-    // console.log(e, offset);
     if (this.theEnd) {
       return;
     }
 
     const end = this.viewport.getRenderedRange().end;
     const total = this.viewport.getDataLength();
+    console.log(end, total);
 
     if (end === total) {
       this.offset.next(offset);

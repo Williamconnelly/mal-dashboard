@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { async } from '@angular/core/testing';
 import { ipcMain, IpcRenderer } from 'electron';
-import { BehaviorSubject, EMPTY, forkJoin, from, Observable, of } from 'rxjs';
+import { BehaviorSubject, EMPTY, forkJoin, from, Observable, of, Subject } from 'rxjs';
 import { concatMap, expand, map, mergeAll, switchMap, take, takeWhile, tap, toArray } from 'rxjs/operators';
 import { ListNode, MALList } from '../types/mal-types';
 import { IPCService } from './ipc.service';
@@ -36,7 +36,9 @@ export class MALService {
 
   private malTokenInfo: MalTokenResponse;
 
-  private list$ = new BehaviorSubject<MALList>(null);
+  private userList$ = new Subject<MALList>();
+
+  private queryList$ = new Subject<MALList>();
 
   // Included in getUserList request
   private enabledRequestFields = [
@@ -125,7 +127,7 @@ export class MALService {
           take(1)
         ).subscribe(
           list => {
-            this.list$.next(list);
+            this.userList$.next(list);
           }, 
           err => {
             console.error('Failed to retrieve MAL user list', err);
@@ -171,7 +173,7 @@ export class MALService {
               take(1)
             ).subscribe(
               list => {
-                this.list$.next(list);
+                this.userList$.next(list);
               }, 
               err => {
                 console.error(err);
@@ -204,8 +206,12 @@ export class MALService {
     return this._http.get<MALList>(url, headers);
   }
 
-  public getListData(): BehaviorSubject<MALList> {
-    return this.list$;
+  public getListData(): Subject<MALList> {
+    return this.userList$;
+  }
+
+  public getQueryData(): Subject<MALList> {
+    return this.queryList$;
   }
 
   public getDirectoryContents(filepath: string): Observable<string[]> {
@@ -221,9 +227,9 @@ export class MALService {
     return this._http.get<MALList>(queryUrl, headers);
   }
 
-  public getQueryList(query: string): Observable<MALList> {
+  public getQueryList(query: string): void {
     let offset = 0;
-    return this.getQueryPage(query).pipe(
+    this.getQueryPage(query).pipe(
       expand(list => {
         if (list.paging.next) {
           offset += 100;
@@ -238,7 +244,15 @@ export class MALService {
           data: [].concat(...results.map<{node: ListNode}[]>(result => result.data)),
           paging: null
         }
-      })
+      }),
+      take(1)
+    ).subscribe(
+      queryResults => {
+        this.queryList$.next(queryResults);
+      }, 
+      err => {
+        console.error(err);
+      }
     )
   }
 

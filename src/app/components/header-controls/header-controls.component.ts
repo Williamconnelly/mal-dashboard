@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
 import { IPCService } from 'src/app/services/ipc.service';
+import { MALService } from 'src/app/services/mal.service';
 import { SakugaService } from 'src/app/services/sakuga.service';
 
 @Component({
@@ -23,7 +24,7 @@ export class HeaderControlsComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject<boolean>();
 
-  constructor(private _data: DataService, private _router: Router, private _ipc: IPCService, private _sakuga: SakugaService) {
+  constructor(private _data: DataService, private _router: Router, private _ipc: IPCService, private _sakuga: SakugaService, private _MAL: MALService) {
     this.searchString$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -93,7 +94,8 @@ export class HeaderControlsComponent implements OnInit, OnDestroy {
         if (this._router.url === '/sakuga') {
           this._sakuga.fetchPosts(search);
         } else if (this._router.url === '/explore') {
-          // TODO: Handle Explore Search
+          this._MAL.getQueryList(search);
+          this._data.loadingStatus.exploreLoading$.next(true);
         }
       }
     );

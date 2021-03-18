@@ -29,6 +29,12 @@ export class DataService {
   // List displayed by components
   private displayList$ = new BehaviorSubject<ListNode[]>(null);
 
+  // Full List returned by MAL Query
+  private MALQueryResults$ = new BehaviorSubject<ListNode[]>(null);
+
+  // List displayed by Explore
+  private MALQueryDisplay$ = new BehaviorSubject<ListNode[]>(null);
+
   private _destroy$ = new Subject<boolean>();
 
   // Available filter params
@@ -60,7 +66,7 @@ export class DataService {
     listLoading$: new BehaviorSubject<boolean>(true),
     sakugaLoading$: new BehaviorSubject<boolean>(false),
     tagLoading$:new BehaviorSubject<boolean>(true),
-    exploreLoading$: new BehaviorSubject<boolean>(true)
+    exploreLoading$: new BehaviorSubject<boolean>(false)
   };
 
   constructor(private _mal: MALService, private _ipc: IPCService) {
@@ -80,6 +86,20 @@ export class DataService {
       }
     );
 
+    this._mal.getQueryData().pipe(
+      filter(list => !!list),
+      takeUntil(this._destroy$)
+    ).subscribe(
+      list => {
+        // MAL Returning Duplicate Instances in response. Filter response
+        const filteredList = [...new Map<number, ListNode>(list.data.map(ele => [ele.node.id, ele.node])).values()];
+        this.MALQueryDisplay$.next(filteredList);
+      },
+      err => {
+        console.error(err);
+      }
+    )
+
     this._ipc.renderer.invoke('get-media-config').then(
       (map: string) => {
         console.log('Got config', JSON.parse(map));
@@ -94,6 +114,10 @@ export class DataService {
 
   public getListData(): Observable<ListNode[]> {
     return this.displayList$;
+  }
+
+  public getQueryResults(): Observable<ListNode[]> {
+    return this.MALQueryDisplay$;
   }
 
   private filterList(): void {
@@ -264,15 +288,6 @@ export class DataService {
   };
 
   public openFile(path: string): void {
-    // shell.openExternal(path).then(
-    //   res => {
-    //     console.log(res);
-    //   }
-    // ).catch(
-    //   err => {
-    //     console.error(err);
-    //   }
-    // )
     this._ipc.renderer.invoke('open-file', path).then(
       res => {
         console.log('Opened file', res);
