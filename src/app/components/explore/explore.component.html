@@ -24,6 +24,11 @@
                   <td style="width: 50%;">Loading...</td>
                 </ng-container>
               </tr>
+              <tr class="expanding-row-container">
+                <td colspan="7" class="expanding-row">
+                  <app-expanded-content #expandedContent [listNode]="media"></app-expanded-content>
+                </td>
+              </tr>
             </ng-container>
           </table>
         </cdk-virtual-scroll-viewport>

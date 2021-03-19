@@ -1,11 +1,12 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { filter, map, mergeMap, scan, take, takeUntil, tap } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
 import { ThemeService } from 'src/app/services/theme-service/theme.service';
 import { ListNode } from 'src/app/types/mal-types';
+import { ExpandedContentComponent } from '../expanded-content/expanded-content.component';
 
 @Component({
   selector: 'app-explore',
@@ -17,6 +18,8 @@ export class ExploreComponent implements OnInit {
   private _destroy$ = new Subject<boolean>();
 
   public queryResults$ = new BehaviorSubject<ListNode[]>(null);
+
+    @ViewChildren('expandedContent') expandedContent: QueryList<ExpandedContentComponent>;
 
     // CDK Props
 
@@ -32,8 +35,6 @@ export class ExploreComponent implements OnInit {
   
     public rowSize = 77;
 
-    private tempIds = [];
-
   constructor(
     private _data: DataService,
     private _spinner: NgxSpinnerService,
@@ -46,23 +47,6 @@ export class ExploreComponent implements OnInit {
       list => {
         console.log('Query Results!', list);
         this.queryResults$.next(list);
-        
-        // // TEMP
-        // // console.log(this.queryResults$.value.filter(node => this.queryResults$.value.filter(n => n.id === node.id).length > 1));
-        // const shows: ListNode[] = [];
-        // const dupes = [];
-        // this.queryResults$.value.forEach(show => {
-        //   if (!shows.map(s => s.id).includes(show.id)) {
-        //     shows.push(show)
-        //   } else {
-        //     dupes.push(show);
-        //   }
-        // });
-        // console.log('shows', shows);
-        // console.log('dupes', dupes);
-        // const sorted = this.queryResults$.value.sort((a, b) => a.id - b.id);
-        // console.log(sorted);
-        // this._cd.detectChanges();
         this.offset.next(null);
         this.theEnd = false;
         const batchMap = this.offset.pipe(
@@ -107,6 +91,11 @@ export class ExploreComponent implements OnInit {
     )
   }
 
+  public toggleExpandedContent(id: number): void {
+    // this.expandedContent.toArray()[].toggleExpansion();
+    this.expandedContent.toArray().find(c => c.listNode.id === id).toggleExpansion();
+  };
+
    // Virtual Scrolling
 
    public nextBatch(e, offset) {
@@ -122,21 +111,13 @@ export class ExploreComponent implements OnInit {
   }
 
   public getBatch(lastId: number): Observable<ListNode[]> {
-    if (!this.tempIds.includes(lastId)) {
-      this.tempIds.push(lastId);
-    } else {
-      console.warn('LAST ID DUPLICATED', lastId);
-      console.log(this.tempIds);
-    }
     let arrayAfterIndex: ListNode[];
     if (lastId !== null) {
       const currentIndex = this.queryResults$.value.findIndex(node => node.id === lastId) + 1;
-      console.log('``````````` CurrentIndex```````````````', currentIndex);
       arrayAfterIndex = this.queryResults$.value.slice(currentIndex, currentIndex + this.batchSize);
     } else {
       arrayAfterIndex = this.queryResults$.value.slice(0, this.batchSize);
     }
-    console.log('lastId', lastId, 'AfterIndex', 'AfterIndex', arrayAfterIndex);
     const arrObs = of(arrayAfterIndex);
     return arrObs.pipe(
       tap(arr => (arr.length ? null : (this.theEnd = true)))

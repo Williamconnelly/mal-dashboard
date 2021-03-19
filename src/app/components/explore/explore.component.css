@@ -15,7 +15,7 @@ table {
   box-sizing: border-box;
 }
 
-th, td {
+th, td:not(.expanding-row) {
   padding: 8px;
   text-align: left;
 }
@@ -27,6 +27,16 @@ tr:not(.table-header-row):hover {
 
 .tr:first-child td {
   padding-left: 17px;
+}
+
+.expanding-row {
+  padding: 0 !important;
+}
+
+.expanding-row:hover {
+  /* background-color: #f8f7ff; */
+  background-color: var(--background);
+  color: var(--background-text);
 }
 
 .table-image {

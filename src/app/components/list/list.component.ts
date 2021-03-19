@@ -88,7 +88,6 @@ export class ListComponent implements OnInit, AfterViewInit {
       takeUntil(this._destroy$)
     ).subscribe(
       loading => {
-        console.log(loading);
         loading ? this._spinner.show('listSpinner') : this._spinner.hide('listSpinner');
       }
     )
@@ -118,7 +117,6 @@ export class ListComponent implements OnInit, AfterViewInit {
 
     const end = this.viewport.getRenderedRange().end;
     const total = this.viewport.getDataLength();
-    console.log(end, total);
 
     if (end === total) {
       this.offset.next(offset);
