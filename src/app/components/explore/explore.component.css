@@ -88,3 +88,31 @@ tr:not(.table-header-row):hover {
   position: relative;
   height: calc(100% - 4rem);
 }
+
+.tabs-container {
+  display: flex;
+  border-bottom: 1px solid var(--primary);
+}
+
+.tab {
+  padding: 0.5rem 2rem;
+  border-right: 1px solid var(--secondary);
+  letter-spacing: 2px;
+  color: var(--background-text);
+}
+
+.active-tab {
+  background-color: var(--primary);
+  color: var(--primary-text);
+}
+
+.tab:hover {
+  cursor: pointer;
+  background-color: var(--primary);
+  color: var(--primary-text);
+}
+
+.page-contents {
+  position: relative;
+  height: calc(100% - 2.5rem);
+}

@@ -21,6 +21,8 @@ export class ExploreComponent implements OnInit {
 
     @ViewChildren('expandedContent') expandedContent: QueryList<ExpandedContentComponent>;
 
+    public activeTab: 'search' | 'seasonal' = 'search';
+
     // CDK Props
 
     private batchSize = 20;
@@ -126,6 +128,10 @@ export class ExploreComponent implements OnInit {
 
   public getPrimaryColor(): string {
     return this._theme.getActiveTheme().properties['--primary'];
+  }
+
+  public activateTab(tab: 'search' | 'seasonal'): void {
+    this.activeTab = tab;
   }
 
   ngOnDestroy() {
