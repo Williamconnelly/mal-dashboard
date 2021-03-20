@@ -16,11 +16,18 @@
     <p>Filter types: Type, Genre, Status, Score, Studio.</p>
     <i>Example - type:tv, studio:toei_animation,trigger, score:8</i>
   </div>
-  <div class="episode-toggle">
+  <div *ngIf="['/','/list'].includes(currentRoute)" class="episode-toggle">
     <label class="switch">
-      <input type="checkbox" id="togBtn" (change)="toggleEpisodeFilter($event.target.checked)">
+      <input type="checkbox" (change)="toggleEpisodeFilter($event.target.checked)">
       <div class="slider round"></div>
     </label>
     <span>My Episodes</span>
+  </div>
+  <div *ngIf="currentRoute === '/explore'" class="episode-toggle">
+    <label class="switch">
+      <input type="checkbox">
+      <div class="slider round"></div>
+    </label>
+    <span>NSFW Results</span>
   </div>
 </div>

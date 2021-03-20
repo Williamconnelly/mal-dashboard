@@ -4,7 +4,12 @@
     <table class="sticky-header">
       <tr class="table-header-row">
         <th style="width: 5%;">Image</th>
-        <th style="width: 50%;">Title</th>
+        <th style="width: 45%;">Title</th>
+        <th style="width: 10%;">Score</th>
+        <th style="width: 10%;">Episodes</th>
+        <th style="width: 10%;">Type</th>
+        <th style="width: 10%;">Members</th>
+        <th style="width: 10%;"></th>
       </tr>
     </table>
     <div class="list-wrapper">
@@ -17,11 +22,21 @@
                   <td style="width: 5%;">
                     <div class="table-image" [ngStyle]="{'background-image': media.main_picture ? 'url(' + media.main_picture.medium + ')' : ''}"></div>
                   </td>
-                  <td style="width: 50%;">{{media.title}}</td>
+                  <td style="width: 45%;">{{media.title}}</td>
+                  <td style="width: 10%;">{{media.mean || '--'}}</td>
+                  <td style="width: 10%;">{{media.num_episodes}}</td>
+                  <td style="width: 10%;">{{media.media_type | uppercase}}</td>
+                  <td style="width: 10%;">{{media.num_list_users}}</td>
+                  <td style="width: 10%;">[ACTION HERE]</td>
                 </ng-container>
                 <ng-container *ngIf="!media">
                   <td style="width: 5%;"></td>
-                  <td style="width: 50%;">Loading...</td>
+                  <td style="width: 45%;">Loading...</td>
+                  <td style="width: 10%;">Loading...</td>
+                  <td style="width: 10%;">Loading...</td>
+                  <td style="width: 10%;">Loading...</td>
+                  <td style="width: 10%;">Loading...</td>
+                  <td style="width: 10%;">Loading...</td>
                 </ng-container>
               </tr>
               <tr class="expanding-row-container">

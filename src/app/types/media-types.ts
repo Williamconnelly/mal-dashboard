@@ -16,3 +16,7 @@ export class MediaLink {
     this.url = url;
   }
 }
+
+export class UserSettings {
+  enableNSFWSearch = false;
+}

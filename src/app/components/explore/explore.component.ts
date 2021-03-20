@@ -54,7 +54,7 @@ export class ExploreComponent implements OnInit {
             return this.getBatch(n)
           }),
           scan((acc, batch) => {
-            return  [...acc, ...batch ];
+            return [...acc, ...batch];
           }, [])
         );
   
