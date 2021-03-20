@@ -48,6 +48,7 @@
   border-radius: 3px;
   height: 300px;
   width: 212px;
+  min-width: 212px;
 }
 
 .episode-box {
@@ -107,4 +108,12 @@
 .no-data p {
   margin: 1rem 0 0 0;
   font-size: 1.3rem;
+}
+
+.details-container {
+  padding-left: 1rem;
+}
+
+.details-container span {
+  white-space: pre-wrap;
 }

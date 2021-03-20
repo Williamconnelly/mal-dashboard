@@ -95,7 +95,7 @@ tr:not(.table-header-row):hover {
 }
 
 .tab {
-  padding: 0.5rem 2rem;
+  padding: 0.5rem 2.18rem;
   border-right: 1px solid var(--secondary);
   letter-spacing: 2px;
   color: var(--background-text);

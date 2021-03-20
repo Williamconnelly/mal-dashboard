@@ -1,12 +1,7 @@
 <div #panel class="panel" *ngIf="expandedController$ | async">
   <div class="expanded-content-container">
-    <!-- <div class="card">
-      <div class="cover">
-        <div class="image" style="height: 210px; width: 100%;" [ngStyle]="{'background-image':'url(' + listNode.main_picture.large + ')'}"></div>
-      </div>
-    </div> -->
     <div class="display-image" [ngStyle]="{'background-image':'url(' + listNode.main_picture.large + ')'}"></div>
-    <div class="episode-box">
+    <div class="episode-box" *ngIf="!detailView; else Details">
       <ng-container *ngIf="episodes$ | async as episodes; else NoEpisodes">
         <div class="episode-row" *ngFor="let episode of episodes" (click)="playVideo(episode)">
           <i class="episode-icon far fa-play-circle"></i>
@@ -22,5 +17,10 @@
         </div>
       </ng-template>
     </div>
+    <ng-template #Details>
+      <div class="details-container">
+        <span>{{listNode.synopsis}}</span>
+      </div>
+    </ng-template>
   </div>
 </div>

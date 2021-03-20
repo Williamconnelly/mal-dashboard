@@ -21,7 +21,7 @@ export class ExploreComponent implements OnInit {
 
     @ViewChildren('expandedContent') expandedContent: QueryList<ExpandedContentComponent>;
 
-    public activeTab: 'search' | 'seasonal' = 'search';
+    public activeTab: 'search' | 'seasonal' | 'top' = 'search';
 
     // CDK Props
 
@@ -130,7 +130,7 @@ export class ExploreComponent implements OnInit {
     return this._theme.getActiveTheme().properties['--primary'];
   }
 
-  public activateTab(tab: 'search' | 'seasonal'): void {
+  public activateTab(tab: 'search' | 'seasonal' | 'top'): void {
     this.activeTab = tab;
   }
 

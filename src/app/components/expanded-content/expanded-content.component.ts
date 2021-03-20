@@ -13,7 +13,9 @@ import { MediaConfig } from 'src/app/types/media-types';
 })
 export class ExpandedContentComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @Input() listNode: ListNode;
+  @Input() public listNode: ListNode;
+
+  @Input() public detailView = false;
 
   @ViewChildren('panel') panels: QueryList<ElementRef<HTMLElement>>
 
