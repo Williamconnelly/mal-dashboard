@@ -27,10 +27,6 @@
   margin: 0;
 }
 
-.selected:hover {
-  cursor: pointer;
-}
-
 .option:hover {
   cursor: pointer;
   background-color: var(--primary);
@@ -42,3 +38,8 @@
   width: 100%;
 }
 
+.selection:hover {
+  cursor: pointer;
+  background-color: var(--primary);
+  color: var(--primary-text);
+}

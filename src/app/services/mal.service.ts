@@ -38,7 +38,11 @@ export class MALService {
 
   private userList$ = new Subject<MALList>();
 
-  private queryList$ = new Subject<MALList>();
+  private exploreSearch$ = new Subject<MALList>();
+
+  private exploreSeasonal$ = new Subject<MALList>();
+
+  private exploreTop$ = new Subject<MALList>();
 
   // Included in getUserList request
   private enabledRequestFields = [
@@ -210,8 +214,8 @@ export class MALService {
     return this.userList$;
   }
 
-  public getQueryData(): Subject<MALList> {
-    return this.queryList$;
+  getExploreSubject(tab: string): Subject<MALList> {
+    return tab === 'search' ? this.exploreSearch$ : tab === 'seasonal' ? this.exploreSeasonal$ : this.exploreTop$;
   }
 
   public getDirectoryContents(filepath: string): Observable<string[]> {
@@ -248,8 +252,46 @@ export class MALService {
       take(1)
     ).subscribe(
       queryResults => {
-        this.queryList$.next(queryResults);
+        this.exploreSearch$.next(queryResults);
       }, 
+      err => {
+        console.error(err);
+      }
+    )
+  }
+
+  private getSeasonPage(season: string, year: number, offset?: number): Observable<MALList> {
+    const baseUrl = `https://api.myanimelist.net/v2/anime/season`;
+    const reqUrl = `${baseUrl}/${year}/${season}?limit=500&sort=anime_num_list_users&fields=${this.enabledRequestFields.toString()}${offset ? `&offset${offset}` : ''}`;
+    const headers = {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this.malTokenInfo.access_token}`)
+    };
+    return this._http.get<MALList>(reqUrl, headers);
+  }
+
+  public getSeasonList(season: string, year: number): void {
+    let offset = 0;
+    this.getSeasonPage(season, year).pipe(
+      expand(list => {
+        if (list.paging.next) {
+          offset += 500;
+          return this.getSeasonPage(season, year, offset);
+        } else {
+          return EMPTY;
+        }
+      }),
+      toArray(),
+      map(results => {
+        return {
+          data: [].concat(...results.map<{node: ListNode}[]>(result => result.data)),
+          paging: null
+        }
+      }),
+      take(1)
+    ).subscribe(
+      seasonResults => {
+        this.exploreSeasonal$.next(seasonResults);
+      },
       err => {
         console.error(err);
       }

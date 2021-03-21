@@ -12,65 +12,55 @@
     </div>
   </div>
   <div class="page-contents">
-    <ng-container [ngSwitch]="activeTab">
-      <ng-container *ngSwitchCase="'search'">
-        <ng-container *ngIf="infinite | async as nodes">
-          <table class="sticky-header">
-            <tr class="table-header-row">
-              <th style="width: 5%;">Image</th>
-              <th style="width: 45%;">Title</th>
-              <th style="width: 10%;">Score</th>
-              <th style="width: 10%;">Episodes</th>
-              <th style="width: 10%;">Type</th>
-              <th style="width: 10%;">Members</th>
-              <th style="width: 10%;"></th>
-            </tr>
-          </table>
-          <div class="list-wrapper">
-            <ng-container *ngIf="nodes.length; else NoData">
-              <cdk-virtual-scroll-viewport [itemSize]="rowSize" class="scroll-viewport" (scrolledIndexChange)="nextBatch($event, (nodes[nodes.length - 1].id))" appViewportResize>
-                <table>
-                  <ng-container *cdkVirtualFor="let media of nodes; let i = index; templateCacheSize: 0">
-                    <tr (click)="toggleExpandedContent(media.id)" class="table-body-row">
-                      <ng-container *ngIf="media">
-                        <td style="width: 5%;">
-                          <div class="table-image" [ngStyle]="{'background-image': media.main_picture ? 'url(' + media.main_picture.medium + ')' : ''}"></div>
-                        </td>
-                        <td style="width: 45%;">{{media.title}}</td>
-                        <td style="width: 10%;">{{media.mean || '--'}}</td>
-                        <td style="width: 10%;">{{media.num_episodes}}</td>
-                        <td style="width: 10%;">{{media.media_type | uppercase}}</td>
-                        <td style="width: 10%;">{{media.num_list_users}}</td>
-                        <td style="width: 10%;">{{media.my_list_status ? media.my_list_status.status : 'ACTION'}}</td>
-                      </ng-container>
-                      <ng-container *ngIf="!media">
-                        <td style="width: 5%;"></td>
-                        <td style="width: 45%;">Loading...</td>
-                        <td style="width: 10%;">Loading...</td>
-                        <td style="width: 10%;">Loading...</td>
-                        <td style="width: 10%;">Loading...</td>
-                        <td style="width: 10%;">Loading...</td>
-                        <td style="width: 10%;">Loading...</td>
-                      </ng-container>
-                    </tr>
-                    <tr class="expanding-row-container">
-                      <td colspan="7" class="expanding-row">
-                        <app-expanded-content #expandedContent [listNode]="media" [detailView]="true"></app-expanded-content>
-                      </td>
-                    </tr>
+    <ng-container *ngIf="infinite | async as nodes">
+      <table class="sticky-header">
+        <tr class="table-header-row">
+          <th style="width: 5%;">Image</th>
+          <th style="width: 45%;">Title</th>
+          <th style="width: 10%;">Score</th>
+          <th style="width: 10%;">Episodes</th>
+          <th style="width: 10%;">Type</th>
+          <th style="width: 10%;">Members</th>
+          <th style="width: 10%;"></th>
+        </tr>
+      </table>
+      <div class="list-wrapper">
+        <ng-container *ngIf="nodes.length; else NoData">
+          <cdk-virtual-scroll-viewport [itemSize]="rowSize" class="scroll-viewport" (scrolledIndexChange)="nextBatch($event, (nodes[nodes.length - 1].id))" appViewportResize>
+            <table>
+              <ng-container *cdkVirtualFor="let media of nodes; let i = index; templateCacheSize: 0">
+                <tr (click)="toggleExpandedContent(media.id)" class="table-body-row">
+                  <ng-container *ngIf="media">
+                    <td style="width: 5%;">
+                      <div class="table-image" [ngStyle]="{'background-image': media.main_picture ? 'url(' + media.main_picture.medium + ')' : ''}"></div>
+                    </td>
+                    <td style="width: 45%;">{{media.title}}</td>
+                    <td style="width: 10%;">{{media.mean || '--'}}</td>
+                    <td style="width: 10%;">{{media.num_episodes ? media.num_episodes : '--'}}</td>
+                    <td style="width: 10%;">{{media.media_type | uppercase}}</td>
+                    <td style="width: 10%;">{{media.num_list_users}}</td>
+                    <td style="width: 10%;">{{media.my_list_status ? media.my_list_status.status : 'ACTION'}}</td>
                   </ng-container>
-                </table>
-              </cdk-virtual-scroll-viewport>
-            </ng-container>
-          </div>
+                  <ng-container *ngIf="!media">
+                    <td style="width: 5%;"></td>
+                    <td style="width: 45%;">Loading...</td>
+                    <td style="width: 10%;">Loading...</td>
+                    <td style="width: 10%;">Loading...</td>
+                    <td style="width: 10%;">Loading...</td>
+                    <td style="width: 10%;">Loading...</td>
+                    <td style="width: 10%;">Loading...</td>
+                  </ng-container>
+                </tr>
+                <tr class="expanding-row-container">
+                  <td colspan="7" class="expanding-row">
+                    <app-expanded-content #expandedContent [listNode]="media" [detailView]="true"></app-expanded-content>
+                  </td>
+                </tr>
+              </ng-container>
+            </table>
+          </cdk-virtual-scroll-viewport>
         </ng-container>
-      </ng-container>
-      <ng-container *ngSwitchCase="'seasonal'">
-        <h1>Seasonal Active</h1>
-      </ng-container>
-      <ng-container *ngSwitchCase="'top'">
-        <h1>Top Rated Active</h1>
-      </ng-container>
+      </div>
     </ng-container>
 
     <ngx-spinner [name]="'listSpinner'" bdColor="rgba(0, 0, 0, 0.8)" size="medium" [color]="getPrimaryColor()" type="ball-clip-rotate-pulse" [fullScreen]="false">

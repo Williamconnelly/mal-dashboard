@@ -24,7 +24,7 @@
                   </td>
                   <td style="width: 50%;">{{media.title}}</td>
                   <td style="width: 10%;">{{media.my_list_status.score || '--'}}</td>
-                  <td style="width: 10%;">{{media.my_list_status.num_episodes_watched}} / {{media.num_episodes}}</td>
+                  <td style="width: 10%;">{{media.my_list_status.num_episodes_watched}} / {{media.num_episodes ? media.num_episodes : '--'}}</td>
                   <td style="width: 10%;">{{media.my_list_status.status | titlecase}}</td>
                   <td style="width: 10%;">{{media.media_type | uppercase}}</td>
                   <td style="width: 5%">

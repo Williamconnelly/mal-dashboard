@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { MediaConfig, MediaConfigMap } from 'src/app/types/media-types';
 import { Post } from 'src/app/types/sakuga-types';
-import { ListNode, MALList } from '../../types/mal-types';
+import { ListNode } from '../../types/mal-types';
 import { IPCService } from '../ipc.service';
 import { MALService } from '../mal.service';
 import { SakugaService } from '../sakuga.service';
@@ -32,8 +32,14 @@ export class DataService {
   // Full List returned by MAL Query
   private MALQueryResults$ = new BehaviorSubject<ListNode[]>(null);
 
-  // List displayed by Explore
-  private MALQueryDisplay$ = new BehaviorSubject<ListNode[]>(null);
+  // Full List returned by SEASON query
+  private MALSeasonResults$ = new BehaviorSubject<ListNode[]>(null);
+
+  // Full List returned by TOP query
+  private MALTopResults$ = new BehaviorSubject<ListNode[]>(null);
+
+   // List displayed by Explore
+   private MALExploreDisplay$ = new BehaviorSubject<ListNode[]>(null);
 
   private _destroy$ = new Subject<boolean>();
 
@@ -86,19 +92,56 @@ export class DataService {
       }
     );
 
-    this._mal.getQueryData().pipe(
+    // Explore Search Stream
+    this._mal.getExploreSubject('search').pipe(
       filter(list => !!list),
       takeUntil(this._destroy$)
     ).subscribe(
       list => {
         // MAL Returning Duplicate Instances in response. Filter response
         const filteredList = [...new Map<number, ListNode>(list.data.map(ele => [ele.node.id, ele.node])).values()];
-        this.MALQueryDisplay$.next(filteredList);
+        this.MALQueryResults$.next(filteredList);
+        this.MALExploreDisplay$.next(filteredList);
+        this.loadingStatus.exploreLoading$.next(false);
       },
       err => {
         console.error(err);
       }
-    )
+    );
+
+    // Explore Seasonal Stream
+    this._mal.getExploreSubject('seasonal').pipe(
+      filter(list => !!list),
+      takeUntil(this._destroy$)
+    ).subscribe(
+      list => {
+        // MAL Returning Duplicate Instances in response. Filter response
+        const filteredList = [...new Map<number, ListNode>(list.data.map(ele => [ele.node.id, ele.node])).values()];
+        this.MALSeasonResults$.next(filteredList);
+        this.MALExploreDisplay$.next(filteredList);
+        this.loadingStatus.exploreLoading$.next(false);
+      },
+      err => {
+        console.error(err);
+      }
+    );
+
+    // Explore Top Stream
+    this._mal.getExploreSubject('top').pipe(
+      filter(list => !!list),
+      takeUntil(this._destroy$)
+    ).subscribe(
+      list => {
+        // MAL Returning Duplicate Instances in response. Filter response
+        const filteredList = [...new Map<number, ListNode>(list.data.map(ele => [ele.node.id, ele.node])).values()];
+        this.MALTopResults$.next(filteredList);
+        this.MALExploreDisplay$.next(filteredList);
+        this.loadingStatus.exploreLoading$.next(false);
+      },
+      err => {
+        console.error(err);
+      }
+    );
 
     this._ipc.renderer.invoke('get-media-config').then(
       (map: string) => {
@@ -116,8 +159,8 @@ export class DataService {
     return this.displayList$;
   }
 
-  public getQueryResults(): Observable<ListNode[]> {
-    return this.MALQueryDisplay$;
+  public getExploreResults(): Observable<ListNode[]> {
+    return this.MALExploreDisplay$;
   }
 
   private filterList(): void {
@@ -297,6 +340,34 @@ export class DataService {
         console.error('Failed to open file', err);
       }
     )
+  }
+
+  public getExploreTabData(tab: string) {
+    switch(tab) {
+      case ('search'): this.MALExploreDisplay$.next(this.MALQueryResults$.value ? this.MALQueryResults$.value : []); break;
+      case ('seasonal'): 
+        if (this.MALSeasonResults$.value) {
+          this.MALExploreDisplay$.next(this.MALSeasonResults$.value)
+        } else {
+          const current = this.getCurrentSeason();
+          this._mal.getSeasonList(current.season, current.year);
+          this.loadingStatus.exploreLoading$.next(true);
+        }
+        break;
+      case ('top'): this.MALExploreDisplay$.next([]); break;
+      default: break;
+    }
+  }
+
+  private getSeason(month: number): string {
+    return month < 4 ? 'winter' : month < 7 ? 'spring' : month < 10 ? 'summer' : 'fall';
+  }
+
+  public getCurrentSeason(): {season: string, year: number} {
+    const date = new Date();
+    const season = this.getSeason(date.getMonth());
+    const year = date.getFullYear();
+    return {season, year};
   }
 
 }

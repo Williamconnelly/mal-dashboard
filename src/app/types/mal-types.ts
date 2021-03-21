@@ -97,5 +97,4 @@ export interface ListNode {
     };
     num_list_users: number;
   }
-
 }

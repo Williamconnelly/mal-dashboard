@@ -4,6 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { filter, map, mergeMap, scan, take, takeUntil, tap } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data-service/data-service';
+import { MALService } from 'src/app/services/mal.service';
 import { ThemeService } from 'src/app/services/theme-service/theme.service';
 import { ListNode } from 'src/app/types/mal-types';
 import { ExpandedContentComponent } from '../expanded-content/expanded-content.component';
@@ -17,7 +18,7 @@ export class ExploreComponent implements OnInit {
 
   private _destroy$ = new Subject<boolean>();
 
-  public queryResults$ = new BehaviorSubject<ListNode[]>(null);
+  public exploreResults$ = new BehaviorSubject<ListNode[]>(null);
 
     @ViewChildren('expandedContent') expandedContent: QueryList<ExpandedContentComponent>;
 
@@ -42,13 +43,13 @@ export class ExploreComponent implements OnInit {
     private _spinner: NgxSpinnerService,
     private _theme: ThemeService
   ) { 
-    this._data.getQueryResults().pipe(
+    this._data.getExploreResults().pipe(
       filter(list => !!list),
       takeUntil(this._destroy$)
     ).subscribe(
       list => {
-        console.log('Query Results!', list);
-        this.queryResults$.next(list);
+        console.log('Explore Results!', list);
+        this.exploreResults$.next(list);
         this.offset.next(null);
         this.theEnd = false;
         const batchMap = this.offset.pipe(
@@ -115,10 +116,10 @@ export class ExploreComponent implements OnInit {
   public getBatch(lastId: number): Observable<ListNode[]> {
     let arrayAfterIndex: ListNode[];
     if (lastId !== null) {
-      const currentIndex = this.queryResults$.value.findIndex(node => node.id === lastId) + 1;
-      arrayAfterIndex = this.queryResults$.value.slice(currentIndex, currentIndex + this.batchSize);
+      const currentIndex = this.exploreResults$.value.findIndex(node => node.id === lastId) + 1;
+      arrayAfterIndex = this.exploreResults$.value.slice(currentIndex, currentIndex + this.batchSize);
     } else {
-      arrayAfterIndex = this.queryResults$.value.slice(0, this.batchSize);
+      arrayAfterIndex = this.exploreResults$.value.slice(0, this.batchSize);
     }
     const arrObs = of(arrayAfterIndex);
     return arrObs.pipe(
@@ -132,6 +133,7 @@ export class ExploreComponent implements OnInit {
 
   public activateTab(tab: 'search' | 'seasonal' | 'top'): void {
     this.activeTab = tab;
+    this._data.getExploreTabData(tab);
   }
 
   ngOnDestroy() {
