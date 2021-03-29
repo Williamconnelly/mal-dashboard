@@ -116,3 +116,17 @@ tr:not(.table-header-row):hover {
   position: relative;
   height: calc(100% - 2.5rem);
 }
+
+.season-search {
+  display: inline-block;
+  color: #000000;
+  background-color: #ffffff;
+  padding: 0 2rem;
+  border-radius: 5px;
+}
+
+.season-search:hover {
+  background-color: var(--primary);
+  color: var(--primary-text);
+  cursor: pointer;
+}

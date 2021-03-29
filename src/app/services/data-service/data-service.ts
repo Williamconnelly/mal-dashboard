@@ -65,7 +65,8 @@ export class DataService {
   public searchStrings = {
     listSearch: new BehaviorSubject<string>(''),
     exploreSearch: new BehaviorSubject<string>(''),
-    sakugaSearch: new BehaviorSubject<string>('')
+    sakugaSearch: new BehaviorSubject<string>(''),
+    seasonSearch: new BehaviorSubject<{season: string, year: number}>(null)
   };
 
   public loadingStatus = {
@@ -74,6 +75,8 @@ export class DataService {
     tagLoading$:new BehaviorSubject<boolean>(true),
     exploreLoading$: new BehaviorSubject<boolean>(false)
   };
+
+  public activeExplorerTab: 'search' | 'seasonal' | 'top';
 
   constructor(private _mal: MALService, private _ipc: IPCService) {
     this._mal.getListData().pipe(
@@ -342,7 +345,8 @@ export class DataService {
     )
   }
 
-  public getExploreTabData(tab: string) {
+  public getExploreTabData(tab: 'search' | 'seasonal' | 'top'): void {
+    this.activeExplorerTab = tab;
     switch(tab) {
       case ('search'): this.MALExploreDisplay$.next(this.MALQueryResults$.value ? this.MALQueryResults$.value : []); break;
       case ('seasonal'): 

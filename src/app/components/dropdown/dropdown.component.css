@@ -5,8 +5,6 @@
 
 .select-container {
   position: relative;
-  outline: 1px solid var(--background-text);
-  outline-offset: -1px;
   cursor: pointer;
 }
 
@@ -34,7 +32,6 @@
 }
 
 .selection, .option {
-  padding: 0.3rem 0.5rem;
   width: 100%;
 }
 
@@ -42,4 +39,9 @@
   cursor: pointer;
   background-color: var(--primary);
   color: var(--primary-text);
+}
+
+.outline {
+  outline: 1px solid var(--background-text);
+  outline-offset: -1px;
 }

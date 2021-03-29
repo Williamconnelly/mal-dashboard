@@ -24,6 +24,19 @@ export class ExploreComponent implements OnInit {
 
     public activeTab: 'search' | 'seasonal' | 'top' = 'search';
 
+    public seasonQuery: string;
+
+    public yearQuery: number;
+
+    public seasonOptions = [
+      'Winter',
+      'Spring',
+      'Summer',
+      'Fall'
+    ];
+
+    public yearOptions: string[];
+
     // CDK Props
 
     private batchSize = 20;
@@ -41,7 +54,8 @@ export class ExploreComponent implements OnInit {
   constructor(
     private _data: DataService,
     private _spinner: NgxSpinnerService,
-    private _theme: ThemeService
+    private _theme: ThemeService,
+    private _mal: MALService
   ) { 
     this._data.getExploreResults().pipe(
       filter(list => !!list),
@@ -91,11 +105,17 @@ export class ExploreComponent implements OnInit {
       loading => {
         loading ? this._spinner.show('listSpinner') : this._spinner.hide('listSpinner');
       }
-    )
+    );
+
+    const currentSeason = this._data.getCurrentSeason();
+    this.seasonQuery = this._data.searchStrings.seasonSearch.value ? this._data.searchStrings.seasonSearch.value.season : currentSeason.season;
+    this.yearOptions = [...Array(100)].map((ele, i) => `${currentSeason.year - i}`);
+    this.yearQuery = this._data.searchStrings.seasonSearch.value ? this._data.searchStrings.seasonSearch.value.year : currentSeason.year;
+
+    this.activeTab = this._data.activeExplorerTab || 'search';
   }
 
   public toggleExpandedContent(id: number): void {
-    // this.expandedContent.toArray()[].toggleExpansion();
     this.expandedContent.toArray().find(c => c.listNode.id === id).toggleExpansion();
   };
 
@@ -132,8 +152,25 @@ export class ExploreComponent implements OnInit {
   }
 
   public activateTab(tab: 'search' | 'seasonal' | 'top'): void {
-    this.activeTab = tab;
-    this._data.getExploreTabData(tab);
+    if (tab !== this.activeTab) {
+      this.activeTab = tab;
+      this._data.getExploreTabData(tab);
+    }
+  }
+
+  public seasonChanged(season: string): void {
+    this.seasonQuery = season;
+  }
+
+  public yearChanged(year: string): void {
+    this.yearQuery = parseInt(year, 10);
+  }
+
+  public submitSeasonSearch(): void {
+    this._data.searchStrings.seasonSearch.next({season: this.seasonQuery, year: this.yearQuery});
+    // Use lowercase season for MAL request
+    this._mal.getSeasonList(this.seasonQuery.toLowerCase(), this.yearQuery);
+    this._data.loadingStatus.exploreLoading$.next(true);
   }
 
   ngOnDestroy() {

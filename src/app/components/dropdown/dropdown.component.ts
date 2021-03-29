@@ -13,6 +13,12 @@ export class DropdownComponent implements OnInit {
 
   @Input() public width = '10rem';
 
+  @Input() public selectionLabel: string;
+
+  @Input() public optionPadding: string;
+
+  @Input() public outline = true;
+
   @ViewChild('DropdownContent', {static: false}) private dropdown: ElementRef<HTMLElement>
 
   @ViewChild('Selection', {static: false}) private selectionReference: ElementRef<HTMLElement>

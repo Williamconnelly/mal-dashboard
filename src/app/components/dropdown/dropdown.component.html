@@ -1,6 +1,20 @@
-<div *ngIf="options && options.length" class="select-container" [ngStyle]="{'width': width}">
-  <p #Selection class="selection" (click)="toggleDropdown()">{{selection}}</p>
+<div *ngIf="options && options.length" class="select-container" [ngStyle]="{'width': width}" [ngClass]="outline ? 'outline' : ''">
+  <p 
+    #Selection 
+    class="selection" 
+    (click)="toggleDropdown()" 
+    [ngStyle]="{'padding': optionPadding ? optionPadding : '0.3rem 0.5rem'}"
+  >
+    {{selectionLabel ? selectionLabel + ': ' : ''}}{{selection}}
+  </p>
   <div #DropdownContent class="dropdown-content">
-    <p *ngFor="let option of options" class="option" (click)="selectOption(option)">{{option}}</p>
+    <p 
+      *ngFor="let option of options" 
+      class="option" 
+      (click)="selectOption(option)" 
+      [ngStyle]="{'padding': optionPadding ? optionPadding : '0.3rem 0.5rem'}"
+    >
+      {{option}}
+    </p>
   </div>
 </div>
