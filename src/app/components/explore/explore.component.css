@@ -122,11 +122,63 @@ tr:not(.table-header-row):hover {
   color: #000000;
   background-color: #ffffff;
   padding: 0 2rem;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .season-search:hover {
   background-color: var(--primary);
   color: var(--primary-text);
   cursor: pointer;
+}
+
+.status-display {
+  border: 1px;
+  border-style: solid;
+  background-color: #ffffff;
+  padding: 3px 1.5rem;
+  display: inline-block;
+  min-width: 152px;
+  text-align: center;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.complete {
+  color: #000000;
+  border-color: #000000;
+}
+
+.active {
+  color: #2db039;
+  border-color: #2db039;
+}
+
+.dropped {
+  color: #a12f31;
+  border-color: #a12f31;
+}
+
+.hold {
+  color: #fd8e04;
+  border-color: #fd8e04;
+}
+
+.add {
+  background-color: var(--secondary);
+  color: var(--secondary-text);
+}
+
+.button-icon {
+  margin-right: 0.3rem;
+  color: var(--secondary-text);
+}
+
+.complete:hover, .active:hover, .dropped:hover, .hold:hover {
+  cursor: default;
+}
+
+.status-display.add:hover {
+  cursor: pointer;
+  border-color: var(--primary-text);
+  border-width: 2px 2px 2px 1px;
 }

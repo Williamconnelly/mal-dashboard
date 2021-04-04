@@ -173,6 +173,23 @@ export class ExploreComponent implements OnInit {
     this._data.loadingStatus.exploreLoading$.next(true);
   }
 
+  public getStatusColor(status: string): string {
+    switch(status) {
+      case('completed'): return 'complete'
+      case('watching'): return 'active';
+      case('dropped'): return 'dropped';
+      case('on_hold'): return 'hold';
+      default: return null; 
+    }
+  }
+
+  public addToList(event: MouseEvent, media: ListNode): void {
+    event.stopPropagation();
+    if (media) {
+      
+    }
+  }
+
   ngOnDestroy() {
     this._destroy$.next();
     this._destroy$.complete();

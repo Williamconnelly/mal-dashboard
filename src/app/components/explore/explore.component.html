@@ -30,7 +30,7 @@
           [selectionLabel]="'Year'"
           [optionPadding]="'0.5rem 0 0.5rem 1.18rem'"
           [outline]="false"
-          [width]="'8rem">
+          [width]="'8rem'">
         </dropdown>
         <div class="season-search" (click)="submitSeasonSearch()">
           <span>Search Season</span>
@@ -43,12 +43,12 @@
       <table class="sticky-header">
         <tr class="table-header-row">
           <th style="width: 5%;">Image</th>
-          <th style="width: 45%;">Title</th>
+          <th style="width: 40%;">Title</th>
           <th style="width: 10%;">Score</th>
           <th style="width: 10%;">Episodes</th>
           <th style="width: 10%;">Type</th>
           <th style="width: 10%;">Members</th>
-          <th style="width: 10%;"></th>
+          <th style="width: 15%;"></th>
         </tr>
       </table>
       <div class="list-wrapper">
@@ -61,21 +61,30 @@
                     <td style="width: 5%;">
                       <div class="table-image" [ngStyle]="{'background-image': media.main_picture ? 'url(' + media.main_picture.medium + ')' : ''}"></div>
                     </td>
-                    <td style="width: 45%;">{{media.title}}</td>
+                    <td style="width: 40%;">{{media.title}}</td>
                     <td style="width: 10%;">{{media.mean || '--'}}</td>
                     <td style="width: 10%;">{{media.num_episodes ? media.num_episodes : '--'}}</td>
                     <td style="width: 10%;">{{media.media_type | uppercase}}</td>
                     <td style="width: 10%;">{{media.num_list_users}}</td>
-                    <td style="width: 10%;">{{media.my_list_status ? media.my_list_status.status : 'ACTION'}}</td>
+                    <td style="width: 15%;" class="list-button">
+                      <span 
+                        class="status-display" 
+                        [ngClass]="media.my_list_status ? getStatusColor(media.my_list_status.status) : 'add'"
+                        (click)="addToList($event, !media.my_list_status ? media : null)"
+                      >
+                        <ng-container *ngIf="!media.my_list_status"><i class="fas fa-plus button-icon"></i></ng-container>
+                        {{media.my_list_status ? (media.my_list_status.status | titlecase) : 'Add to List'}}
+                      </span>
+                    </td>
                   </ng-container>
                   <ng-container *ngIf="!media">
                     <td style="width: 5%;"></td>
-                    <td style="width: 45%;">Loading...</td>
+                    <td style="width: 40%;">Loading...</td>
                     <td style="width: 10%;">Loading...</td>
                     <td style="width: 10%;">Loading...</td>
                     <td style="width: 10%;">Loading...</td>
                     <td style="width: 10%;">Loading...</td>
-                    <td style="width: 10%;">Loading...</td>
+                    <td style="width: 15%;">Loading...</td>
                   </ng-container>
                 </tr>
                 <tr class="expanding-row-container">
