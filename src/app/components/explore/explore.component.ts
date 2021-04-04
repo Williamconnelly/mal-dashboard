@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { filter, map, mergeMap, scan, take, takeUntil, tap } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import { DataService } from 'src/app/services/data-service/data-service';
 import { MALService } from 'src/app/services/mal.service';
 import { ThemeService } from 'src/app/services/theme-service/theme.service';
 import { ListNode } from 'src/app/types/mal-types';
+import { StatusUpdate } from 'src/app/types/media-types';
 import { ExpandedContentComponent } from '../expanded-content/expanded-content.component';
 
 @Component({
@@ -35,7 +36,39 @@ export class ExploreComponent implements OnInit {
       'Fall'
     ];
 
+    public statusOptions = [
+      'Watching',
+      'Completed',
+      'On Hold',
+      'Dropped',
+      'Plan to Watch'
+    ];
+
+    public scoreOptions = [
+      '--',
+      '10',
+      '9',
+      '8',
+      '7',
+      '6',
+      '5',
+      '4',
+      '3',
+      '2',
+      '1'
+    ];
+
+    public episodeOptions: number[];
+
     public yearOptions: string[];
+
+    public currentMedia: ListNode;
+
+    public pendingStatusUpdate: StatusUpdate
+
+    @ViewChild('Modal', {static: false}) modal: ElementRef<HTMLElement>;
+
+    @ViewChild('ModalContent', {static: false}) modalContent: ElementRef<HTMLElement>;
 
     // CDK Props
 
@@ -96,6 +129,17 @@ export class ExploreComponent implements OnInit {
         console.error(err);
       }
     );
+  }
+
+  // Click Listener for closing on external modal clicks
+  @HostListener('window:click', ['$event']) onClick(e: MouseEvent) {
+    if (this.modalContent) {
+      const target = e.target as HTMLElement;
+      // Target is not the Modal Content or a child of Modal Content && Was not the preview div opening the modal && currentPost exists
+      if (target !== this.modalContent.nativeElement && !target.classList.contains('modal-field') && !this.modalContent.nativeElement.contains(target) && this.currentMedia) {
+        this.closeModal();
+      }
+    }
   }
 
   ngOnInit() {
@@ -186,8 +230,30 @@ export class ExploreComponent implements OnInit {
   public addToList(event: MouseEvent, media: ListNode): void {
     event.stopPropagation();
     if (media) {
-      
+      this.currentMedia = media;
     }
+  }
+
+  public openModal(event: MouseEvent, media: ListNode): void {
+    event.stopPropagation();
+    if (media) {
+      this.episodeOptions = [...Array(media.num_episodes)].map((ele, i) => i + 1);
+      this.episodeOptions.unshift(0);
+      this.pendingStatusUpdate = new StatusUpdate();
+      this.currentMedia = media;
+      this.modal.nativeElement.style.display = 'block';
+    }
+  }
+
+  public closeModal(): void {
+    this.currentMedia = null;
+    this.episodeOptions = null;
+    this.pendingStatusUpdate = null;
+    this.modal.nativeElement.style.display = 'none';
+  }
+
+  public updatePendingStatus(property: string, value: any): void {
+    this.pendingStatusUpdate[property] = value;
   }
 
   ngOnDestroy() {

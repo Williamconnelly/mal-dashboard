@@ -70,7 +70,7 @@
                       <span 
                         class="status-display" 
                         [ngClass]="media.my_list_status ? getStatusColor(media.my_list_status.status) : 'add'"
-                        (click)="addToList($event, !media.my_list_status ? media : null)"
+                        (click)="openModal($event, !media.my_list_status ? media : null)"
                       >
                         <ng-container *ngIf="!media.my_list_status"><i class="fas fa-plus button-icon"></i></ng-container>
                         {{media.my_list_status ? (media.my_list_status.status | titlecase) : 'Add to List'}}
@@ -112,4 +112,57 @@
     </div>
   </ng-template>
 
+</div>
+
+<div #Modal class="modal">
+  <div #ModalContent *ngIf="currentMedia as media" class="modal-content modal-field">
+    <div class="modal-header">
+      <span>{{media.title}}</span>
+      <div (click)="closeModal()" class="modal-button">
+        <i class="fas fa-times"></i>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="display-image" [ngStyle]="{'background-image':'url(' + media.main_picture.large + ')'}"></div>
+      <div class="list-controls">
+        <div class="controller">
+          <dropdown 
+            [options]="statusOptions" 
+            [selection]="pendingStatusUpdate.status"
+            (selectionChange)="updatePendingStatus('status', $event)" 
+            [selectionLabel]="'Status'"
+            [optionPadding]="'0.5rem'"
+            [width]="'12rem'">
+          </dropdown>
+        </div>
+        <div class="controller">
+          <span>Rewatching</span>
+          <label class="switch">
+            <input type="checkbox" [value]="pendingStatusUpdate.rewatching" (change)="updatePendingStatus('rewatching', $event)">
+            <div class="slider round"></div>
+          </label>
+        </div>
+        <div class="controller">
+          <dropdown 
+            [options]="scoreOptions"
+            [selection]="pendingStatusUpdate.score"
+            (selectionChange)="updatePendingStatus('score', $event)" 
+            [selectionLabel]="'Score'"
+            [optionPadding]="'0.5rem'"
+            [width]="'6rem'">
+          </dropdown>
+        </div>
+        <div class="controller">
+          <dropdown 
+            [options]="episodeOptions"
+            [selection]="pendingStatusUpdate.num_watched_episodes"
+            (selectionChange)="updatePendingStatus('num_watched_episodes', $event)" 
+            [selectionLabel]="'Episodes Watched'"
+            [optionPadding]="'0.5rem'"
+            [width]="'13rem'">
+          </dropdown>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
